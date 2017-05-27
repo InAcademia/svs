@@ -26,10 +26,12 @@ class InAcademiaBackend(SAMLBackend):
         return None
 
     def _translate_response(self, auth_response, state):
+        # translate() will handle potentially encrypted SAML Assertions
+        # auth_response object will also be modified
+        internal_resp = super()._translate_response(auth_response, state)
+
         if 'eduPersonAffiliation' not in auth_response.ava:
             raise SATOSAAuthenticationError(state, 'Missing eduPersonAffiliation in response from IdP.')
-
-        internal_resp = super()._translate_response(auth_response, state)
 
         internal_resp.user_id = self._get_user_id(auth_response)
         if not internal_resp.user_id:
