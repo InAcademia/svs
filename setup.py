@@ -33,7 +33,7 @@ setup(
         ]
     },
     install_requires=[
-        'satosa==3.3.1',
+       # 'satosa==3.3.1',
         'Mako',
         'gunicorn',
         'Werkzeug'
