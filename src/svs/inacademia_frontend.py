@@ -105,8 +105,12 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         if matching_affiliation:
             return super().handle_authn_response(context, internal_resp,
                                                  {'auth_time': internal_resp.auth_info.timestamp})
-
-        auth_error = AuthorizationErrorResponse(error='access_denied')
+        # User's affiliation was not the one requested so return an error
+        # If the client sent us a state parameter, we should reflect it back according to the spec
+        if 'state' in auth_req:
+            auth_error = AuthorizationErrorResponse(error='access_denied', state=auth_req['state'])
+        else:
+            auth_error = AuthorizationErrorResponse(error='access_denied')
         del context.state[self.name]
         http_response = auth_error.request(auth_req['redirect_uri'], should_fragment_encode(auth_req))
         return SeeOther(http_response)
