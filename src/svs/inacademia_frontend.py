@@ -92,7 +92,8 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         if not isinstance(internal_request, InternalRequest):
             # error message
             return internal_request
-
+        client_info = self.provider.clients[internal_request.requester]
+        context.state[consent.STATE_KEY] = {'requester_logo': client_info['logo_filename']}
         internal_request.approved_attributes.append('affiliation')
         return self.auth_req_callback_func(context, internal_request)
 
