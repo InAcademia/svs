@@ -99,14 +99,16 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
 
     def handle_authn_response(self, context, internal_resp):
         auth_req = self._get_authn_request_from_state(context.state)
-        affiliation_attribute = self.converter.from_internal('openid', internal_resp.attributes)['affiliation']
-        scope = auth_req['scope']
-        matching_affiliation = get_matching_affiliation(scope, affiliation_attribute)
+        # User might not give us consent to release affiliation
+        if 'affiliation' in internal_resp.attributes:
+            affiliation_attribute = self.converter.from_internal('openid', internal_resp.attributes)['affiliation']
+            scope = auth_req['scope']
+            matching_affiliation = get_matching_affiliation(scope, affiliation_attribute)
 
-        if matching_affiliation:
-            return super().handle_authn_response(context, internal_resp,
-                                                 {'auth_time': internal_resp.auth_info.timestamp})
-        # User's affiliation was not the one requested so return an error
+            if matching_affiliation:
+                return super().handle_authn_response(context, internal_resp,
+                                                     {'auth_time': internal_resp.auth_info.timestamp})
+        # User's affiliation was not released or was not the one requested so return an error
         # If the client sent us a state parameter, we should reflect it back according to the spec
         if 'state' in auth_req:
             auth_error = AuthorizationErrorResponse(error='access_denied', state=auth_req['state'])
