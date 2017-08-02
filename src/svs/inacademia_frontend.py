@@ -8,7 +8,7 @@ from pyop.util import should_fragment_encode
 from satosa.frontends.openid_connect import OpenIDConnectFrontend
 from satosa.internal_data import InternalRequest
 from satosa.response import SeeOther
-
+from satosa.micro_services import consent
 from svs.affiliation import AFFILIATIONS, get_matching_affiliation
 
 logger = logging.getLogger(__name__)
@@ -93,7 +93,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
             # error message
             return internal_request
         client_info = self.provider.clients[internal_request.requester]
-        context.state[consent.STATE_KEY] = {'requester_logo': client_info['logo_filename']}
+        context.state[consent.STATE_KEY] = {'requester_logo': client_info['logo']}
         internal_request.approved_attributes.append('affiliation')
         return self.auth_req_callback_func(context, internal_request)
 
