@@ -30,8 +30,8 @@ class InAcademiaBackend(SAMLBackend):
         # auth_response object will also be modified
         internal_resp = super()._translate_response(auth_response, state)
 
-        if 'eduPersonAffiliation' not in auth_response.ava:
-            raise SATOSAAuthenticationError(state, 'Missing eduPersonAffiliation in response from IdP.')
+        if not any(affiliation_attr in auth_response.ava for affiliation_attr in self.config['affiliation_attributes']):
+            raise SATOSAAuthenticationError(state, 'Missing affiliation attribute in response from IdP.')
         internal_resp.user_id = self._get_user_id(auth_response)
         if not internal_resp.user_id:
             raise SATOSAAuthenticationError(state, 'Failed to construct persistent user id from IdP response.')
