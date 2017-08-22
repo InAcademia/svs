@@ -1,6 +1,10 @@
 module: svs.inacademia_backend.InAcademiaBackend
 name: SAML2Persistent
 config:
+  userid_source_attributes: ['eduPersonTargetedID', 'eduPersonPrincipalName']
+  user_id_salt: fdsafjdskgfdagdfkgdfjhkgldfhjgklfdhgjdfkhgadfkghdfjkgfdeh
+  affiliation_attributes: ['eduPersonAffiliation', 'eduPersonScopedAffiliation']
+
   persistent_required: Yes
   sp_config:
     name: ['InAcademia.org - TEST', 'en']

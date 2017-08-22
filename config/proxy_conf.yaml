@@ -5,10 +5,8 @@ COOKIE_STATE_NAME: 'SATOSA_STATE'
 STATE_ENCRYPTION_KEY: 'asdASD123'
 USER_ID_HASH_SALT: '61a89d2db0b9e1e27d490d050b478fe71f352fddd3528a44157f43e339c6c62f2362fb413179937d96172bf84233317'
 BACKEND_MODULES:
-  - 'plugins/inacademia_persistent_backend.yaml'
-  - 'plugins/inacademia_transient_backend.yaml'
+  - 'plugins/inacademia_backend.yaml'
 FRONTEND_MODULES:
   - 'plugins/inacademia_frontend.yaml'
 MICRO_SERVICES:
-  - 'plugins/scope_based_routing.yaml'
   - 'plugins/user_consent.yaml'
