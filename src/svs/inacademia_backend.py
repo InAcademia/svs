@@ -1,6 +1,7 @@
 import hashlib
 import random
 from time import mktime, gmtime
+from urllib.parse import parse_qs
 
 from saml2.saml import NAMEID_FORMAT_PERSISTENT, NAMEID_FORMAT_TRANSIENT
 from satosa.backends.saml2 import SAMLBackend
@@ -40,9 +41,8 @@ class InAcademiaBackend(SAMLBackend):
         if not any(affiliation_attr in auth_response.ava for affiliation_attr in self.config['affiliation_attributes']):
             raise SATOSAAuthenticationError(state, 'Missing affiliation attribute in response from IdP.')
 
-        #if 'eduPersonAffiliation' not in auth_response.ava:
-        #    raise SATOSAAuthenticationError(state, 'Missing eduPersonAffiliation in response from IdP.')
-        if 'persistent' in state['InAcademia']['oidc_request']:
+        params = parse_qs(state['InAcademia']['oidc_request'])
+        if 'peristent' in params['scope'][0].split(" "):
             scope = 'persistent'
         else:
             scope = 'transient'
