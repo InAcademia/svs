@@ -3,3 +3,4 @@ name: InAcademia
 config:
   signing_key_path: pki/frontend.key
   client_db_path: clients.json
+  entity_id_map_path: entityids.json

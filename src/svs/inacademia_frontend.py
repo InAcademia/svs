@@ -1,7 +1,8 @@
 import functools
 import json
 import logging
-
+from urllib.parse import parse_qs
+from base64 import urlsafe_b64encode
 from oic.oic.message import AuthorizationErrorResponse
 from pyop.exceptions import InvalidAuthenticationRequest
 from pyop.util import should_fragment_encode
@@ -67,11 +68,12 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
     def __init__(self, auth_req_callback_func, internal_attributes, config, base_url, name):
         config['provider'] = {'response_types_supported': ['id_token'], 'scopes_supported': ['openid'] + SCOPE_VALUES}
         super().__init__(auth_req_callback_func, internal_attributes, config, base_url, name)
+        self.entity_id_map = self._read_entity_id_map()
 
     def _create_provider(self, endpoint_baseurl):
         super()._create_provider(endpoint_baseurl)
         self.provider.authentication_request_validators.append(
-            functools.partial(scope_is_valid_for_client, self.provider))
+                functools.partial(scope_is_valid_for_client, self.provider))
         self.provider.authentication_request_validators.append(
             functools.partial(claims_request_is_valid_for_client, self.provider))
 
@@ -85,6 +87,32 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         for k in {'signing_key_path', 'client_db_path'}:
             if k not in config:
                 raise ValueError("Missing configuration parameter '{}' for InAcademia frontend.".format(k))
+    
+    def _read_entity_id_map(self):
+        with open(self.config['entity_id_map_path']) as f:
+            return json.loads(f.read())
+
+    def _get_target_entityid_from_request(self, context):
+        params = parse_qs(context.state['InAcademia']['oidc_request'])
+        if 'idp_hint' in params.keys():
+            idp_hint_key = params['idp_hint'][0]
+        else:
+            #try and read it from the specific claim
+            try:
+                claims = json.loads(context.request['claims'])
+                idp_hint_key = claims['id_token']['idp_hint']['value']
+            except KeyError:
+                idp_hint_key = None
+        if idp_hint_key:
+            entity_id = self.entity_id_map.get(idp_hint_key, None)
+            if entity_id:
+                #Base64 encode the URL because SATOSA's saml2 backend expects it so
+                entity_id = urlsafe_b64encode(entity_id.encode('utf-8'))
+        else:
+            entity_id = None
+        
+        return entity_id
+
 
     def handle_authn_request(self, context):
         internal_request = super()._handle_authn_request(context)
@@ -94,6 +122,9 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
             return internal_request
         client_info = self.provider.clients[internal_request.requester]
         context.state[consent.STATE_KEY] = {'requester_logo': client_info['logo']}
+        target_entity_id = self._get_target_entityid_from_request(context)
+        if target_entity_id:
+            context.internal_data["mirror.target_entity_id"] = target_entity_id
         internal_request.approved_attributes.append('affiliation')
         return self.auth_req_callback_func(context, internal_request)
 
