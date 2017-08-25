@@ -1,13 +1,13 @@
 module: svs.inacademia_backend.InAcademiaBackend
-name: SAML2Persistent
+name: InAcademiaBackend
 config:
   userid_source_attributes: ['eduPersonTargetedID', 'eduPersonPrincipalName']
-  user_id_salt: fdsafjdskgfdagdfkgdfjhkgldfhjgklfdhgjdfkhgadfkghdfjkgfdeh
+  user_id_salt: changethisvaluetosomethingunique
   affiliation_attributes: ['eduPersonAffiliation', 'eduPersonScopedAffiliation']
-
-  persistent_required: Yes
   sp_config:
-    name: ['InAcademia.org - TEST', 'en']
+    key_file: /path/to/the.key
+    cert_file: /path/to/the.crt
+    name: ['InAcademia Affiliation Validation Service', 'en']
     organization: {display_name: InAcademia, name: InAcademia, url: 'https://inacademia.org/about'}
 
     contact_person:
@@ -16,30 +16,31 @@ config:
       - {contact_type: technical, given_name: InAcademia, sur_name: Technical Support, email_address: tech@inacademia.org}
 
     metadata:
-      mdq: ['http://pyff:8080']
-
-    entityid: <base_url>/<name>/proxy_saml2_backend.xml
+        #mdq: ['https://md.nordu.net/']
+        local: ['/var/svs/dev-idp.xml']
+    entityid: 'https://dev-inacademia.org/metadata/inacademia-simple-validation.xml'
     service:
       sp:
         allow_unsolicited: true
         endpoints:
           assertion_consumer_service:
-          - [<base_url>/<name>/acs/post, 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST']
-          - [<base_url>/<name>/acs/redirect, 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect']
+          - ['<base_url>/<name>/acs/post', 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST']
+          - ['<base_url>/<name>/acs/redirect', 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect']
           discovery_response:
-          - [<base_url>/<name>/disco, 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol']
+          - ['<base_url>/<name>/disco', 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol']
         required_attributes:
-          - edupersonaffiliation
+          - edupersonscopedaffiliation
         optional_attributes:
+          - edupersonaffiliation
           - schachomeorganization
           - edupersontargetedid
           - edupersonprincipalname
         name_id_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
         ui_info:
           display_name:
-            - {text: InAcademia.org - TEST, lang: en}
+            - {text: 'InAcademia Affiliation Validation Service', lang: en}
           description:
-              - {text: 'The InAcademia Simple validation Sevice allows for the easy validation of affiliation (Student, Faculty, Staff) of a user in Academia. This is a TEST instance',
+              - {text: 'InAcademia validates the affiliation status (student, faculty, staff) assigned to you by your home institution. This data then is provided in anonymized form to services which for example grant student discounts. While your Institution assists in validation your affiliation, it has no relation with the Service requesting to validate your affiliation.',
                 lang: en}
           logo:
             - {text: 'https://inacademia.org/static/logo.png', width: '120', height: '60', lang: en}
@@ -50,5 +51,5 @@ config:
           privacy_statement_url:
             - {text: 'https://inacademia.org/about/privacy', lang: en}
     name_form: 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-  disco_srv: http://localhost:8080/role/idp.ds
-  publish_metadata: <base_url>/<name>/metadata
+  disco_srv: 'https://md.nordu.net/role/idp.ds'
+
