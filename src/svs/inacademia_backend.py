@@ -11,7 +11,6 @@ from satosa.exception import SATOSAAuthenticationError
 class InAcademiaBackend(SAMLBackend):
     def __init__(self, outgoing, internal_attributes, config, base_url, name):
         super().__init__(outgoing, internal_attributes, config, base_url, name)
-        self.persistent_required = config['persistent_required']
         self.user_id_salt = config['user_id_salt']
 
     def _get_user_id(self, auth_response, scope):
@@ -52,14 +51,11 @@ class InAcademiaBackend(SAMLBackend):
 
         return internal_resp
 
-    def _generate_random_user_id(self, length =12, allowed_chars='abcdefghijklmnopqrstuvwxyz'
+    def _generate_random_user_id(self, length=12, allowed_chars='abcdefghijklmnopqrstuvwxyz'
                                         'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'):
         """
         Get a random token of given length and allowed characters. If SystemRandom cannot be use
         PRNG is fed with a salt, and the current timestamp
-        :param length: 
-        :param allowed_chars: 
-        :return: 
         """
         try:
             random_imp = random.SystemRandom()

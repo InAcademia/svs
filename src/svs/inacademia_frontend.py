@@ -110,9 +110,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
                 entity_id = urlsafe_b64encode(entity_id.encode('utf-8'))
         else:
             entity_id = None
-        
         return entity_id
-
 
     def handle_authn_request(self, context):
         internal_request = super()._handle_authn_request(context)
