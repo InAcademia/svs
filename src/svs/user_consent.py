@@ -1,4 +1,5 @@
 import gettext
+from urllib.parse import urlparse
 
 import pkg_resources
 from mako.lookup import TemplateLookup
@@ -19,46 +20,44 @@ def N_(s):
 
 
 class UserConsent(ResponseMicroService):
-    """
-    Select which backend should be used based on what the OIDC scope is.
-    """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, config, *args, **kwargs):
         """
         Constructor.
         """
         super().__init__(*args, **kwargs)
-
+        self.logo_base_path = config['logo_base_path']
         self.endpoint = '/handle_consent'
         self.template_lookup = TemplateLookup(directories=[pkg_resources.resource_filename('svs', 'templates/')])
 
     def _find_requester_name(self, requester_name, language):
         return requester_name
-        # requester_names = {entry['lang']: entry['text'] for entry in requester_name}
-        # # fallback to english, or if all else fails, use the first entry in the list of names
-        # fallback = requester_names.get('en', requester_name[0]['text'])
-        # return requester_names.get(language, fallback)
+        requester_names = {entry['lang']: entry['text'] for entry in requester_name}
+        # fallback to english, or if all else fails, use the first entry in the list of names
+        fallback = requester_names.get('en', requester_name[0]['text'])
+        return requester_names.get(language, fallback)
 
     def _attributes_to_release(self, internal_response):
         attributes = {
             N_('Affiliation'): internal_response.attributes['affiliation'],
             N_('Identifier'): internal_response.user_id,
-            N_('Authentication time'): internal_response.auth_info.timestamp
         }
         if 'domain' in internal_response.attributes:
             attributes[N_('Domain')] = internal_response.attributes['domain']
 
         return attributes
 
-    def render_consent(self, internal_response, language='en'):
+    def render_consent(self, consent_state, internal_response, language='en'):
         requester_name = self._find_requester_name(internal_response.requester, language)
+        requester_logo = consent_state.get('requester_logo', None)
         gettext.translation('messages', localedir=pkg_resources.resource_filename('svs', 'data/i18n/locale'),
                             languages=[language]).install()
 
         released_attributes = self._attributes_to_release(internal_response)
         template = self.template_lookup.get_template('consent.mako')
-        page = template.render(client_name=requester_name,
-                               released_attributes=released_attributes,
+        page = template.render(requester_name=requester_name,
+                               requester_logo=self._normalize_logo(requester_logo),       
+                               released_claims=released_attributes,
                                form_action='/consent{}'.format(self.endpoint),
                                language=language)
 
@@ -74,8 +73,8 @@ class UserConsent(ResponseMicroService):
         internal_response.attributes = {k: v for k, v in internal_response.attributes.items() if
                                         k in consent_state['filter']}
 
-        context.state[self.name] = {'internal_response': internal_response.to_dict()}
-        return self.render_consent(internal_response)
+        consent_state['internal_response'] = internal_response.to_dict()
+        return self.render_consent(consent_state, internal_response)
 
     def accept_consent(self, context):
         """
@@ -86,10 +85,10 @@ class UserConsent(ResponseMicroService):
         :param context: response context
         :return: response
         """
-        consent_state = context.state[self.name]
+        consent_state = context.state[consent.STATE_KEY]
         saved_resp = consent_state['internal_response']
         internal_response = InternalResponse.from_dict(saved_resp)
-        del context.state[self.name]
+        del context.state[consent.STATE_KEY]
         return super().process(context, internal_response)
 
     def deny_consent(self, context):
@@ -101,16 +100,16 @@ class UserConsent(ResponseMicroService):
         :param context: response context
         :return: response
         """
-        del context.state[self.name]
+        del context.state[consent.STATE_KEY]
         raise SATOSAAuthenticationError(context.state, 'Consent was denied by the user.')
 
     def change_language(self, context):
-        consent_state = context.state[self.name]
+        consent_state = context.state[consent.STATE_KEY]
         saved_resp = consent_state['internal_response']
         internal_response = InternalResponse.from_dict(saved_resp)
 
         lang = context.request.get('lang', 'en')
-        return self.render_consent(internal_response, lang)
+        return self.render_consent(consent_state, internal_response, lang)
 
     def register_endpoints(self):
         base = '^consent{}'.format(self.endpoint)
@@ -119,3 +118,14 @@ class UserConsent(ResponseMicroService):
         url_map.append(('{}/allow'.format(base), self.accept_consent))
         url_map.append(('{}/deny'.format(base), self.deny_consent))
         return url_map
+
+    def _normalize_logo(self, requester_logo):
+        if requester_logo:
+            parsed_path = urlparse(requester_logo)
+            if parsed_path.scheme in ['http', 'https']:
+                normalized_path = requester_logo
+            else:
+                normalized_path = os.path.join(self.logo_base_path, requester_logo)
+            return normalized_path
+        else:
+            return None
