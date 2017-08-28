@@ -119,7 +119,8 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
             # error message
             return internal_request
         client_info = self.provider.clients[internal_request.requester]
-        context.state[consent.STATE_KEY] = {'requester_logo': client_info['logo']}
+        if 'logo' in client_info;
+            context.state[consent.STATE_KEY] = {'requester_logo': client_info['logo']}
         target_entity_id = self._get_target_entityid_from_request(context)
         if target_entity_id:
             context.internal_data["mirror.target_entity_id"] = target_entity_id
