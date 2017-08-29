@@ -291,8 +291,10 @@ h3.sp {
 
 
 <div class="row">
-  <div class="col-md-10">
-      ${_("This description will explain to the academic user what is going on and what information we will share with ")} ${requester_name}
+    <div class="col-md-10">
+        <p class="text-justify">${_("To allow you to prove your affiliation, ")} ${requester_name} ${_("makes use of the InAcademia service.")}</p>
+        <p class="text-justify">${_("Your institution has confirmed your affiliation to Inacademia. We now ask you to consent to confirming your affiliation to ")} ${requester_name}. ${_("In addition, InAcademia may reveal the country and name of your institution. InAcademia will not store any of the data we have received from your institution, nor will we store your consent.")}</p>
+        <p class="text-justify">${_("For more details on the information we will provide to")} ${requester_name}, ${_('please select "Details" below.')}</p>
   </div>
   <div class="col-md-2 aligh-right sp-col-2">
       % if requester_logo:
