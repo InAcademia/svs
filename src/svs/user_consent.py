@@ -40,7 +40,6 @@ class UserConsent(ResponseMicroService):
     def _attributes_to_release(self, internal_response):
         attributes = {
             N_('Affiliation'): internal_response.attributes['affiliation'],
-            N_('Identifier'): internal_response.user_id,
         }
         if 'domain' in internal_response.attributes:
             attributes[N_('Domain')] = internal_response.attributes['domain']
