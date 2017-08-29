@@ -19,9 +19,10 @@ class ScopeBasedRouting(RequestMicroService):
         :param context: request context
         :param data: the internal request
         """
-        if 'persistent' in context.request['scope']:
-            context.target_backend = 'SAML2Persistent'
-        else:
-            context.target_backend = 'SAML2Transient'
+        context.target_backend = "SAML2Persistent"
+#        if 'persistent' in context.request['scope']:
+#            context.target_backend = 'SAML2Persistent'
+#        else:
+#            context.target_backend = 'SAML2Transient'
         return super().process(context, data)
 
