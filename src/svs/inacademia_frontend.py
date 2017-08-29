@@ -1,9 +1,10 @@
 import functools
 import json
 import logging
-from urllib.parse import parse_qs
+from urllib.parse import parse_qs, urlparse
 from base64 import urlsafe_b64encode
 from oic.oic.message import AuthorizationErrorResponse
+from oic.oic.provider import RegistrationEndpoint, AuthorizationEndpoint, TokenEndpoint, UserinfoEndpoint
 from pyop.exceptions import InvalidAuthenticationRequest
 from pyop.util import should_fragment_encode
 from satosa.frontends.openid_connect import OpenIDConnectFrontend
@@ -125,6 +126,8 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         if target_entity_id:
             context.internal_data["mirror.target_entity_id"] = target_entity_id
         internal_request.approved_attributes.append('affiliation')
+        #Add the target_backend name so that we don't have to use scope nased routing
+        context.target_backend = self.config['backend_name']
         return self.auth_req_callback_func(context, internal_request)
 
     def handle_authn_response(self, context, internal_resp):
@@ -147,3 +150,40 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         del context.state[self.name]
         http_response = auth_error.request(auth_req['redirect_uri'], should_fragment_encode(auth_req))
         return SeeOther(http_response)
+
+    def register_endpoints(self, backend_names):
+        """
+        See super class satosa.frontends.base.FrontendModule
+        :type backend_names: list[str]
+        :rtype: list[(str, ((satosa.context.Context, Any) -> satosa.response.Response, Any))]
+        :raise ValueError: if more than one backend is configured
+        """
+        backend_name = backend_names[0]
+
+        endpoint_baseurl = "{}/{}".format(self.base_url, self.name)
+        self._create_provider(endpoint_baseurl)
+
+        provider_config = ("^.well-known/openid-configuration$", self.provider_config)
+        jwks_uri = ("^{}/jwks$".format(self.name), self.jwks)
+
+        auth_endpoint = "{}/{}/{}".format(self.base_url, self.name, AuthorizationEndpoint.url)
+        self.provider.configuration_information["authorization_endpoint"] = auth_endpoint
+        auth_path = urlparse(auth_endpoint).path.lstrip("/")
+        authentication = ("^{}$".format(auth_path), self.handle_authn_request)
+        url_map = [provider_config, jwks_uri, authentication]
+
+        if any("code" in v for v in self.provider.configuration_information["response_types_supported"]):
+            self.provider.configuration_information["token_endpoint"] = "{}/{}".format(endpoint_baseurl,
+                                                                                       TokenEndpoint.url)
+            token_endpoint = ("^{}/{}".format(self.name, TokenEndpoint.url), self.token_endpoint)
+            url_map.append(token_endpoint)
+
+            self.provider.configuration_information["userinfo_endpoint"] = "{}/{}".format(endpoint_baseurl,
+                                                                                          UserinfoEndpoint.url)
+            userinfo_endpoint = ("^{}/{}".format(self.name, UserinfoEndpoint.url), self.userinfo_endpoint)
+            url_map.append(userinfo_endpoint)
+        if "registration_endpoint" in self.provider.configuration_information:
+            client_registration = ("^{}/{}".format(self.name, RegistrationEndpoint.url), self.client_registration)
+            url_map.append(client_registration)
+
+        return url_map
