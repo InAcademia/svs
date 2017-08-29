@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: svs 0.1.0\n"
 "Report-Msgid-Bugs-To: tech@inacademia.org\n"
-"POT-Creation-Date: 2016-09-20 08:24+0200\n"
+"POT-Creation-Date: 2017-08-29 23:05+0300\n"
 "PO-Revision-Date: 2016-06-29 09:39+0200\n"
 "Last-Translator: Tangui Coulouarn <tangui.coulouarn@deic.dk>\n"
 "Language: da\n"
@@ -12,40 +12,76 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+"Generated-By: Babel 2.5.0\n"
 
-#: src/svs/user_consent.py:57
+#: src/svs/user_consent.py:42
 msgid "Affiliation"
 msgstr "Tilknytning"
 
-#: src/svs/user_consent.py:57
-msgid "Identifier"
-msgstr "ID"
-
-#: src/svs/user_consent.py:57
-msgid "Authentication time"
-msgstr "Autentificeringstidspunkt"
-
-#: src/svs/user_consent.py:57
+#: src/svs/user_consent.py:45
 msgid "Domain"
 msgstr "Domæne"
 
-#: src/svs/templates/consent.mako:27
-msgid "Consent - Your consent is required to continue."
+#: src/svs/templates/consent.mako:23
+msgid "Consent"
+msgstr ""
+
+#: src/svs/templates/consent.mako:284
+#, fuzzy
+msgid "Your consent is required to continue."
 msgstr "Samtykke – dit samtykke er påkrævet"
 
-#: src/svs/templates/consent.mako:53
-msgid "{client_name} requires the information below to be transferred:"
-msgstr "{client_name} anmoder om de følgende oplysninger:"
+#: src/svs/templates/consent.mako:295
+msgid "To allow you to prove your affiliation, "
+msgstr ""
 
-#: src/svs/templates/consent.mako:60
-msgid "Ok, accept"
+#: src/svs/templates/consent.mako:295
+msgid "makes use of the InAcademia service."
+msgstr ""
+
+#: src/svs/templates/consent.mako:296
+msgid ""
+"Your institution has confirmed your affiliation to Inacademia. We now ask"
+" you to consent to confirming your affiliation to "
+msgstr ""
+
+#: src/svs/templates/consent.mako:296
+msgid ""
+"In addition, InAcademia may reveal the country and name of your "
+"institution. InAcademia will not store any of the data we have received "
+"from your institution, nor will we store your consent."
+msgstr ""
+
+#: src/svs/templates/consent.mako:297
+msgid "For more details on the information we will provide to"
+msgstr ""
+
+#: src/svs/templates/consent.mako:297
+msgid "please select \"Details\" below."
+msgstr ""
+
+#: src/svs/templates/consent.mako:310
+msgid "Details"
+msgstr ""
+
+#: src/svs/templates/consent.mako:328
+#, fuzzy
+msgid "OK, accept"
 msgstr "Ja, jeg accepterer"
 
-#: src/svs/templates/consent.mako:64
+#: src/svs/templates/consent.mako:330
 msgid "No, cancel"
 msgstr "Nej, afbryd"
 
-#: src/svs/templates/consent.mako:81
-msgid "Terms of service"
-msgstr "Betingelser for brug af tjenesten"
+#~ msgid "Identifier"
+#~ msgstr "ID"
+
+#~ msgid "Authentication time"
+#~ msgstr "Autentificeringstidspunkt"
+
+#~ msgid "{client_name} requires the information below to be transferred:"
+#~ msgstr "{client_name} anmoder om de følgende oplysninger:"
+
+#~ msgid "Terms of service"
+#~ msgstr "Betingelser for brug af tjenesten"
+
