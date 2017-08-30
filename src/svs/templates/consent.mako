@@ -294,7 +294,7 @@ h3.sp {
              <ul class="list-group">
              % for attribute in released_claims:
                  <li class="list-group-item"><span>${_(attribute).capitalize()}</span>:&nbsp;
-i                <span>
+                 <span>
                  % if isinstance(released_claims[attribute], list):
                      % for v in set(released_claims[attribute]):
                          ${v}
