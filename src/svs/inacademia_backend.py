@@ -41,7 +41,7 @@ class InAcademiaBackend(SAMLBackend):
             raise SATOSAProcessingHaltError(state=state, message="No affiliation attribute from IdP", redirect_uri=self.error_uri)
 
         params = parse_qs(state['InAcademia']['oidc_request'])
-        if 'peristent' in params['scope'][0].split(" "):
+        if 'persistent' in params['scope'][0].split(" "):
             scope = 'persistent'
         else:
             scope = 'transient'
