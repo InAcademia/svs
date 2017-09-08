@@ -140,7 +140,8 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
 
             if matching_affiliation:
                 return super().handle_authn_response(context, internal_resp,
-                                                     {'auth_time': internal_resp.auth_info.timestamp})
+                                                     {'auth_time': internal_resp.auth_info.timestamp,
+                                                      'requested_scopes': {'values': scope}})
         # User's affiliation was not released or was not the one requested so return an error
         # If the client sent us a state parameter, we should reflect it back according to the spec
         if 'state' in auth_req:
