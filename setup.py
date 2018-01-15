@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='svs',
-    version='1.0.0',
+    version='1.0.1',
     description='The InAcademia Simple validation Service allows for the easy validation of affiliation (Student,'
                 'Faculty, Staff) of a user in Academia',
     license='Apache 2.0',
@@ -33,7 +33,7 @@ setup(
         ]
     },
     install_requires=[
-        'satosa==3.4.4',
+        'satosa==3.4.8',
         'Mako',
         'gunicorn',
         'Werkzeug'
