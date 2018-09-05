@@ -47,7 +47,9 @@ class UserConsent(ResponseMicroService):
         return attributes
 
     def render_consent(self, consent_state, internal_response, language='en'):
-        requester_name = self._find_requester_name(internal_response.requester, language)
+        requester_name = consent_state.get('requester_display_name', None)
+        if not requester_name:
+            requester_name = self._find_requester_name(internal_response.requester, language)
         requester_logo = consent_state.get('requester_logo', None)
         gettext.translation('messages', localedir=pkg_resources.resource_filename('svs', 'data/i18n/locale'),
                             languages=[language]).install()
