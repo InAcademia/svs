@@ -255,8 +255,21 @@ h3.sp {
       <div class="col-xs-2 align-right sp-col-2">
         <form action="${form_action}" method="GET">
           <select name="lang" id="lang" onchange="this.form.submit()">
-              <option value="en">EN</option>
-              <option value="sv">SV</option>
+              <option value="en">Language</option>
+              <option value="en">English</option>
+              <option value="sv">Swedish</option>
+              <option value="af">Afrikaans</option>
+              <option value="cs">Czech</option>
+              <option value="da">Danish</option>
+              <option value="de">German</option>
+              <option value="el">Greek</option>
+              <option value="et">Estonian</option>
+              <option value="fr">French</option>
+              <option value="hu">Hungarian</option>
+              <option value="lt">Lithuanian</option>
+              <option value="nl">Dutch</option>
+              <option value="pt">Portuguese</option>
+              <option value="ru">Russian</option>
           </select>
         </form>
       </div>
