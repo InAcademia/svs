@@ -283,7 +283,9 @@ h3.sp {
       % endif
   </div>
 </div>
-<div class="row clearfix"><br/></div>
+<div class="row">
+    <div class="col-md-10"><a href="https://inacademia.org/privacy-and-data-protection/">Inacademia Privacy Policy</a></div>
+</div>
 <div class="row clearfix"><br/></div>
 <div class="panel-group">
     <div class="panel panel-default">
