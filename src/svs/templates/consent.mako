@@ -255,7 +255,6 @@ h3.sp {
       <div class="col-xs-2 align-right sp-col-2">
         <form action="${form_action}" method="GET">
           <select name="lang" id="lang" onchange="this.form.submit()">
-              <option value="en">Language</option>
               <option value="en">English</option>
               <option value="sv">Swedish</option>
               <option value="af">Afrikaans</option>
@@ -343,6 +342,24 @@ h3.sp {
         $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
         $(this).attr("clicked", "true");
     });
+
+
+    function setSelectedIndex(s, v) {
+        for ( var i = 0; i < s.options.length; i++ ) {
+            if ( s.options[i].value == v ) {
+                s.options[i].selected = true;
+                return;
+            }
+        }
+    }
+
+    window.onload = function ()
+    {
+         setSelectedIndex(document.getElementById('lang'), "${language}");
+
+    };
+
+
 </script>
 </body>
 </html>
