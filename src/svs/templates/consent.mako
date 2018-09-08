@@ -296,7 +296,7 @@ h3.sp {
   </div>
 </div>
 <div class="row">
-    <div class="col-md-10"><a href="https://inacademia.org/privacy-and-data-protection/">Inacademia Privacy Policy</a></div>
+    <div class="col-md-10"><a href="https://inacademia.org/privacy-and-data-protection/">InAcademia Privacy Policy</a></div>
 </div>
 <div class="row clearfix"><br/></div>
 <div class="panel-group">
@@ -343,7 +343,6 @@ h3.sp {
         $(this).attr("clicked", "true");
     });
 
-
     function setSelectedIndex(s, v) {
         for ( var i = 0; i < s.options.length; i++ ) {
             if ( s.options[i].value == v ) {
@@ -356,9 +355,7 @@ h3.sp {
     window.onload = function ()
     {
          setSelectedIndex(document.getElementById('lang'), "${language}");
-
     };
-
 
 </script>
 </body>
