@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: svs 0.1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2017-08-29 23:05+0300\n"
-"PO-Revision-Date: 2018-09-08 17:28+0100\n"
+"PO-Revision-Date: 2018-09-10 23:47+0100\n"
 "Last-Translator: Thomas Baerecke <thomas.baerecke@switch.ch>\n"
 "Language: de\n"
 "Language-Team: InAcademia <tech@inacademia.org>\n"
@@ -26,19 +26,19 @@ msgstr "Domain"
 msgid "Consent"
 msgstr "Zustimmung"
 
-#: src/svs/templates/consent.mako:284
+#: src/svs/templates/consent.mako:277
 msgid "Your consent is required to continue."
 msgstr "Ihre Einwilligung ist erforderlich, um fortzufahren."
 
-#: src/svs/templates/consent.mako:295
+#: src/svs/templates/consent.mako:288
 msgid "To allow you to prove your affiliation, "
 msgstr "Damit Sie Ihre Zugehörigkeit nachweisen können,"
 
-#: src/svs/templates/consent.mako:295
+#: src/svs/templates/consent.mako:288
 msgid "makes use of the InAcademia service."
 msgstr "nutzt den inacademia-Service."
 
-#: src/svs/templates/consent.mako:296
+#: src/svs/templates/consent.mako:289
 msgid ""
 "Your institution has confirmed your affiliation to Inacademia. We now ask you "
 "to consent to confirming your affiliation to "
@@ -46,7 +46,7 @@ msgstr ""
 "Ihre Institution hat ihre Zugehörigkeit zu inacademia bestätigt. Wir bitten "
 "Sie nun, der Bestätigung ihrer Zugehörigkeit zu "
 
-#: src/svs/templates/consent.mako:296
+#: src/svs/templates/consent.mako:289
 msgid ""
 "In addition, InAcademia may reveal the country and name of your institution. "
 "InAcademia will not store any of the data we have received from your "
@@ -57,11 +57,27 @@ msgstr ""
 "Institution erhalten haben, und wir werden Ihre Einwilligung auch nicht "
 "speichern."
 
-#: src/svs/templates/consent.mako:297
+#: src/svs/templates/consent.mako:291
 msgid "For more details on the information we will provide to"
 msgstr ""
 "Weitere Details zu den Informationen, die wir Ihnen zur Verfügung stellen "
 "werden"
+
+#: src/svs/templates/consent.mako:290
+msgid ""
+"In order to exercise your data subject rights, please save this screen (e.g. "
+"make a print screen). It shall be provided with your request."
+msgstr ""
+"Um Ihre Datenrechte auszuüben, speichern Sie bitte diesen Bildschirm (z.b. "
+"einen druckbildschirm erstellen), – er mit Ihrer Anfrage versehen ist."
+
+#: src/svs/templates/consent.mako:300
+msgid "More information: "
+msgstr "Mehr Informationen:"
+
+#: src/svs/templates/consent.mako:300
+msgid "Privacy Statement"
+msgstr "Datenschutzerklärung"
 
 #: src/svs/templates/consent.mako:297
 msgid "please select \"Details\" below."
