@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: InAcademia 0.1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2017-08-29 23:05+0300\n"
-"PO-Revision-Date: 2018-09-10 16:55+0100\n"
+"PO-Revision-Date: 2018-09-10 23:36+0100\n"
 "Last-Translator: Rebecka Gulliksson <rebecka.gulliksson@umu.se>\n"
 "Language: en\n"
 "Language-Team: InAcademia <tech@inacademia.org>\n"
@@ -58,7 +58,7 @@ msgstr ""
 #: src/svs/templates/consent.mako:290
 msgid ""
 "In order to exercise your data subject rights, please save this screen (e.g. "
-"make a print screen) – it shall be provided with your request."
+"make a print screen). It shall be provided with your request."
 msgstr ""
 
 #: src/svs/templates/consent.mako:300
