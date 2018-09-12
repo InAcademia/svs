@@ -1,87 +1,93 @@
-
 msgid ""
 msgstr ""
 "Project-Id-Version: svs 0.1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2017-08-29 23:05+0300\n"
-"PO-Revision-Date: 2016-06-14 14:51+0200\n"
+"PO-Revision-Date: 2018-09-12 16:35+0100\n"
 "Last-Translator: Mihály Héder <mihaly.heder@sztaki.mta.hu>\n"
 "Language: hu\n"
 "Language-Team: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.0\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: src/svs/user_consent.py:42
 msgid "Affiliation"
-msgstr "Affiliáció"
+msgstr "Hovatartozás"
 
 #: src/svs/user_consent.py:45
 msgid "Domain"
-msgstr "Honos intézmény"
+msgstr "Tartomány"
 
 #: src/svs/templates/consent.mako:23
 msgid "Consent"
-msgstr ""
+msgstr "Hozzájárulás"
 
-#: src/svs/templates/consent.mako:284
-#, fuzzy
+#: src/svs/templates/consent.mako:277
 msgid "Your consent is required to continue."
-msgstr "Hozzájárulás - a folytatáshoz a hozzájárulása szükséges"
+msgstr "Az Ön hozzájárulása szükséges a folytatáshoz."
 
-#: src/svs/templates/consent.mako:295
+#: src/svs/templates/consent.mako:288
 msgid "To allow you to prove your affiliation, "
-msgstr ""
+msgstr "Annak érdekében, hogy bizonyítani a hovatartozás,"
 
-#: src/svs/templates/consent.mako:295
+#: src/svs/templates/consent.mako:288
 msgid "makes use of the InAcademia service."
-msgstr ""
+msgstr "él az inacademia szolgáltatás."
 
-#: src/svs/templates/consent.mako:296
+#: src/svs/templates/consent.mako:289
 msgid ""
-"Your institution has confirmed your affiliation to Inacademia. We now ask"
-" you to consent to confirming your affiliation to "
+"Your institution has confirmed your affiliation to Inacademia. We now ask "
+"you to consent to confirming your affiliation to "
 msgstr ""
+"Az Ön intézménye megerősítette az Ön hovatartozását inacademia. Most kérjük, "
+"hogy hozzájáruljon ahhoz, hogy megerősítse a hovatartozását, hogy"
 
-#: src/svs/templates/consent.mako:296
+#: src/svs/templates/consent.mako:289
 msgid ""
-"In addition, InAcademia may reveal the country and name of your "
-"institution. InAcademia will not store any of the data we have received "
-"from your institution, nor will we store your consent."
+"In addition, InAcademia may reveal the country and name of your institution. "
+"InAcademia will not store any of the data we have received from your "
+"institution, nor will we store your consent."
 msgstr ""
+"Ezen kívül az inacademia is felfedi az országot és az intézmény nevét. Az "
+"inacademia nem tárolja az Ön intézménye által kapott adatokat, és nem is "
+"tároljuk a beleegyezését."
 
-#: src/svs/templates/consent.mako:297
+#: src/svs/templates/consent.mako:291
 msgid "For more details on the information we will provide to"
+msgstr "További részleteket az általunk szolgáltatott információkról"
+
+#: src/svs/templates/consent.mako:290
+msgid ""
+"In order to exercise your data subject rights, please save this screen (e.g. "
+"make a print screen). It shall be provided with your request."
 msgstr ""
+"Az érintettek jogainak gyakorlása érdekében kérjük, mentse ezt a képernyőt "
+"(pl. nyomtatási képernyő). A kérelemhez meg kell adni."
+
+#: src/svs/templates/consent.mako:300
+msgid "More information: "
+msgstr "További információk:"
+
+#: src/svs/templates/consent.mako:300
+msgid "Privacy Statement"
+msgstr "Adatvédelmi nyilatkozat"
 
 #: src/svs/templates/consent.mako:297
 msgid "please select \"Details\" below."
-msgstr ""
+msgstr "Kérjük, válassza ki a \"Részletek\" alatt."
 
 #: src/svs/templates/consent.mako:310
 msgid "Details"
-msgstr ""
+msgstr "Részletek"
 
 #: src/svs/templates/consent.mako:328
-#, fuzzy
 msgid "OK, accept"
-msgstr "Ok, elfogadom"
+msgstr "OK, Accept"
 
 #: src/svs/templates/consent.mako:330
 msgid "No, cancel"
-msgstr "Nem, Mégsem"
-
-#~ msgid "Identifier"
-#~ msgstr "Azonosító"
-
-#~ msgid "Authentication time"
-#~ msgstr "Az authentikáció ideje"
-
-#~ msgid "{client_name} requires the information below to be transferred:"
-#~ msgstr "{client_name} az alábbi információ átadását igényli:"
-
-#~ msgid "Terms of service"
-#~ msgstr "A szolgáltatás felhasználási feltételei"
-
+msgstr "Nem, Mégse"
