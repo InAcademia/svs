@@ -1,18 +1,18 @@
-
 msgid ""
 msgstr ""
 "Project-Id-Version: InAcademia 0.1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2017-08-29 23:05+0300\n"
-"PO-Revision-Date: 2016-07-07 16:44+0100\n"
+"PO-Revision-Date: 2018-09-11 22:46+0100\n"
 "Last-Translator: Stefan Paetow <stefan.paetow@jisc.ac.uk>\n"
 "Language: af\n"
 "Language-Team: InAcademia <tech@inacademia.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.0\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: src/svs/user_consent.py:42
 msgid "Affiliation"
@@ -24,64 +24,70 @@ msgstr "Domein"
 
 #: src/svs/templates/consent.mako:23
 msgid "Consent"
-msgstr ""
+msgstr "Toestemming"
 
-#: src/svs/templates/consent.mako:284
-#, fuzzy
+#: src/svs/templates/consent.mako:277
 msgid "Your consent is required to continue."
-msgstr "Toestemming - U toestemming is nodig om voort te gaan."
+msgstr "Jou toestemming word vereis om voort te gaan."
 
-#: src/svs/templates/consent.mako:295
+#: src/svs/templates/consent.mako:288
 msgid "To allow you to prove your affiliation, "
-msgstr ""
+msgstr "Om toe te laat om te bewys jou affiliasie,"
 
-#: src/svs/templates/consent.mako:295
+#: src/svs/templates/consent.mako:288
 msgid "makes use of the InAcademia service."
-msgstr ""
+msgstr "maak gebruik van die InAcademia diens."
 
-#: src/svs/templates/consent.mako:296
+#: src/svs/templates/consent.mako:289
 msgid ""
-"Your institution has confirmed your affiliation to Inacademia. We now ask"
-" you to consent to confirming your affiliation to "
+"Your institution has confirmed your affiliation to Inacademia. We now ask "
+"you to consent to confirming your affiliation to "
 msgstr ""
+"Jou skool het jou affiliasie aan Inacademia bevestig. Nou vra ons u om "
+"toestemming tot bevestiging van jou affiliasie aan"
 
-#: src/svs/templates/consent.mako:296
+#: src/svs/templates/consent.mako:289
 msgid ""
-"In addition, InAcademia may reveal the country and name of your "
-"institution. InAcademia will not store any of the data we have received "
-"from your institution, nor will we store your consent."
+"In addition, InAcademia may reveal the country and name of your institution. "
+"InAcademia will not store any of the data we have received from your "
+"institution, nor will we store your consent."
 msgstr ""
+"Daarbenewens, kan InAcademia onthul die land en die naam van jou skool. "
+"InAcademia enige van die data wat ons ontvang het van jou instelling sal "
+"bewaar nie, en ook sal ons bewaar jou toestemming."
 
-#: src/svs/templates/consent.mako:297
+#: src/svs/templates/consent.mako:291
 msgid "For more details on the information we will provide to"
+msgstr "Vir meer besonderhede oor die inligting voorsien ons aan"
+
+#: src/svs/templates/consent.mako:290
+msgid ""
+"In order to exercise your data subject rights, please save this screen (e.g. "
+"make a print screen). It shall be provided with your request."
 msgstr ""
+"Ten einde te oefen jou data onderwerp regte, Stoor asseblief hierdie skerm "
+"(bv. Maak 'n gedrukte skerm). Dit word voorsien met jou versoek."
+
+#: src/svs/templates/consent.mako:300
+msgid "More information: "
+msgstr "Meer inligting:"
+
+#: src/svs/templates/consent.mako:300
+msgid "Privacy Statement"
+msgstr "Privaatheidsverklaring"
 
 #: src/svs/templates/consent.mako:297
 msgid "please select \"Details\" below."
-msgstr ""
+msgstr "Kies asseblief \"Besonderhede\" hieronder."
 
 #: src/svs/templates/consent.mako:310
 msgid "Details"
-msgstr ""
+msgstr "Besonderhede"
 
 #: src/svs/templates/consent.mako:328
-#, fuzzy
 msgid "OK, accept"
 msgstr "Ok, aanvaar"
 
 #: src/svs/templates/consent.mako:330
 msgid "No, cancel"
 msgstr "Nee, kanselleer"
-
-#~ msgid "Identifier"
-#~ msgstr "Identifiseerder"
-
-#~ msgid "Authentication time"
-#~ msgstr "Tyd van verifikasie"
-
-#~ msgid "{client_name} requires the information below to be transferred:"
-#~ msgstr "{client_name} vereis dat die inligting hieronder oorgedra word:"
-
-#~ msgid "Terms of service"
-#~ msgstr "Gebruiksvoorwaardes"
-

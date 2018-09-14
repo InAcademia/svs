@@ -1,18 +1,18 @@
-
 msgid ""
 msgstr ""
 "Project-Id-Version: InAcademia 0.1.0\n"
 "Report-Msgid-Bugs-To: tech@inacademia.org\n"
 "POT-Creation-Date: 2017-08-29 23:05+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2018-09-11 22:52+0100\n"
 "Last-Translator: Slávek Licehammer <slavek@ics.muni.cz>\n"
 "Language: cs\n"
 "Language-Team: InAcademia <tech@inacademia.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.0\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: src/svs/user_consent.py:42
 msgid "Affiliation"
@@ -24,64 +24,70 @@ msgstr "Doména"
 
 #: src/svs/templates/consent.mako:23
 msgid "Consent"
-msgstr ""
+msgstr "Souhlas"
 
-#: src/svs/templates/consent.mako:284
-#, fuzzy
+#: src/svs/templates/consent.mako:277
 msgid "Your consent is required to continue."
-msgstr "Odsouhlasení - Pro pokračování je nutný souhlas."
+msgstr "Váš souhlas je nutný k pokračování."
 
-#: src/svs/templates/consent.mako:295
+#: src/svs/templates/consent.mako:288
 msgid "To allow you to prove your affiliation, "
-msgstr ""
+msgstr "Abyste mohli prokázat svou příslušnost,"
 
-#: src/svs/templates/consent.mako:295
+#: src/svs/templates/consent.mako:288
 msgid "makes use of the InAcademia service."
-msgstr ""
+msgstr "využívá službu inacademia."
 
-#: src/svs/templates/consent.mako:296
+#: src/svs/templates/consent.mako:289
 msgid ""
-"Your institution has confirmed your affiliation to Inacademia. We now ask"
-" you to consent to confirming your affiliation to "
+"Your institution has confirmed your affiliation to Inacademia. We now ask "
+"you to consent to confirming your affiliation to "
 msgstr ""
+"Vaše instituce potvrdila váš vztah k inacademia. Nyní vás žádáme o souhlas s "
+"potvrzením vaší afilace"
 
-#: src/svs/templates/consent.mako:296
+#: src/svs/templates/consent.mako:289
 msgid ""
-"In addition, InAcademia may reveal the country and name of your "
-"institution. InAcademia will not store any of the data we have received "
-"from your institution, nor will we store your consent."
+"In addition, InAcademia may reveal the country and name of your institution. "
+"InAcademia will not store any of the data we have received from your "
+"institution, nor will we store your consent."
 msgstr ""
+"Kromě toho může inacademia odhalit zemi a název vaší instituce. Inacademia "
+"nebude ukládat žádná data, která jsme obdrželi od vaší instituce, ani vám "
+"neuložíme váš souhlas."
 
-#: src/svs/templates/consent.mako:297
+#: src/svs/templates/consent.mako:291
 msgid "For more details on the information we will provide to"
+msgstr "Další podrobnosti o informacích, které vám poskytneme,"
+
+#: src/svs/templates/consent.mako:290
+msgid ""
+"In order to exercise your data subject rights, please save this screen (e.g. "
+"make a print screen). It shall be provided with your request."
 msgstr ""
+"Chcete-li uplatnit svá práva subjektu údajů, uložte tuto obrazovku (např. "
+"Vytvořte tiskovou obrazovku). Musí být poskytnuta s vaší žádostí."
+
+#: src/svs/templates/consent.mako:300
+msgid "More information: "
+msgstr "Další informace:"
+
+#: src/svs/templates/consent.mako:300
+msgid "Privacy Statement"
+msgstr "Prohlášení o ochraně osobních údajů"
 
 #: src/svs/templates/consent.mako:297
 msgid "please select \"Details\" below."
-msgstr ""
+msgstr "prosím, vyberte \"Podrobnosti\" níže."
 
 #: src/svs/templates/consent.mako:310
 msgid "Details"
-msgstr ""
+msgstr "Detaily"
 
 #: src/svs/templates/consent.mako:328
-#, fuzzy
 msgid "OK, accept"
-msgstr "Ok, souhlasím"
+msgstr "OK, přijmout"
 
 #: src/svs/templates/consent.mako:330
 msgid "No, cancel"
 msgstr "Ne, zrušit"
-
-#~ msgid "Identifier"
-#~ msgstr "Identifikátor"
-
-#~ msgid "Authentication time"
-#~ msgstr "Čas přihlášení"
-
-#~ msgid "{client_name} requires the information below to be transferred:"
-#~ msgstr "{client_name} žádá o přenos následujících informací:"
-
-#~ msgid "Terms of service"
-#~ msgstr "Podmínky použití"
-

@@ -1,18 +1,18 @@
-
 msgid ""
 msgstr ""
 "Project-Id-Version: InAcademia 0.1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2017-08-29 23:05+0300\n"
-"PO-Revision-Date: 2015-03-03 11:19+0100\n"
+"PO-Revision-Date: 2018-09-10 23:36+0100\n"
 "Last-Translator: Rebecka Gulliksson <rebecka.gulliksson@umu.se>\n"
 "Language: en\n"
 "Language-Team: InAcademia <tech@inacademia.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.0\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: src/svs/user_consent.py:42
 msgid "Affiliation"
@@ -26,33 +26,47 @@ msgstr ""
 msgid "Consent"
 msgstr ""
 
-#: src/svs/templates/consent.mako:284
+#: src/svs/templates/consent.mako:277
 msgid "Your consent is required to continue."
 msgstr ""
 
-#: src/svs/templates/consent.mako:295
+#: src/svs/templates/consent.mako:288
 msgid "To allow you to prove your affiliation, "
 msgstr ""
 
-#: src/svs/templates/consent.mako:295
+#: src/svs/templates/consent.mako:288
 msgid "makes use of the InAcademia service."
 msgstr ""
 
-#: src/svs/templates/consent.mako:296
+#: src/svs/templates/consent.mako:289
 msgid ""
-"Your institution has confirmed your affiliation to Inacademia. We now ask"
-" you to consent to confirming your affiliation to "
+"Your institution has confirmed your affiliation to Inacademia. We now ask "
+"you to consent to confirming your affiliation to "
 msgstr ""
 
-#: src/svs/templates/consent.mako:296
+#: src/svs/templates/consent.mako:289
 msgid ""
-"In addition, InAcademia may reveal the country and name of your "
-"institution. InAcademia will not store any of the data we have received "
-"from your institution, nor will we store your consent."
+"In addition, InAcademia may reveal the country and name of your institution. "
+"InAcademia will not store any of the data we have received from your "
+"institution, nor will we store your consent."
 msgstr ""
 
-#: src/svs/templates/consent.mako:297
+#: src/svs/templates/consent.mako:291
 msgid "For more details on the information we will provide to"
+msgstr ""
+
+#: src/svs/templates/consent.mako:290
+msgid ""
+"In order to exercise your data subject rights, please save this screen (e.g. "
+"make a print screen). It shall be provided with your request."
+msgstr ""
+
+#: src/svs/templates/consent.mako:300
+msgid "More information: "
+msgstr ""
+
+#: src/svs/templates/consent.mako:300
+msgid "Privacy Statement"
 msgstr ""
 
 #: src/svs/templates/consent.mako:297
@@ -70,22 +84,3 @@ msgstr ""
 #: src/svs/templates/consent.mako:330
 msgid "No, cancel"
 msgstr ""
-
-#~ msgid "Identifier"
-#~ msgstr ""
-
-#~ msgid "Authentication time"
-#~ msgstr ""
-
-#~ msgid "Consent - Your consent is required to continue."
-#~ msgstr ""
-
-#~ msgid "{client_name} requires the information below to be transferred:"
-#~ msgstr ""
-
-#~ msgid "Ok, accept"
-#~ msgstr ""
-
-#~ msgid "Terms of service"
-#~ msgstr ""
-
