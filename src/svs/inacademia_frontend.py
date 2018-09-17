@@ -44,7 +44,7 @@ def scope_is_valid_for_client(provider, authentication_request):
         if value == 'openid':  # Always allow 'openid' in scope
             continue
         elif value in SCOPE_VALUES and value not in allowed:  # a scope we understand, but not allowed for client
-            logger.debug(logger, 'Scope value \'{}\' not in \'{}\' for client.'.format(value, allowed))
+            logger.debug('Scope value \'{}\' not in \'{}\' for client.'.format(value, allowed))
             raise InvalidAuthenticationRequest('Scope value \'{}\' not allowed.'.format(value),
                                                authentication_request, oauth_error='invalid_scope')
 
@@ -125,11 +125,11 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         if 'logo' in client_info:
             context.state[consent.STATE_KEY]['requester_logo'] = client_info['logo']
         else:
-            logger.debug(logger, 'Logo not present in cdb.json')
+            logger.debug('Logo not present in cdb.json')
         if 'display_name' in client_info:
             context.state[consent.STATE_KEY]['requester_display_name'] = client_info['display_name']
         else:
-            logger.debug(logger, 'User friendly display name not present in cdb.json')
+            logger.debug('User friendly display name not present in cdb.json')
         target_entity_id = self._get_target_entityid_from_request(context)
         if target_entity_id:
             context.internal_data["mirror.target_entity_id"] = target_entity_id
