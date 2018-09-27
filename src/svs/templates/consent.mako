@@ -274,34 +274,36 @@ h3.sp {
       </div>
     </div>
     <div class="row col-md-12 sp-title-container">
-      <h3 class="sp">${_("Your consent is required to continue.")}</h3>
+      <h3 class="sp">${_("Your consent is required to continue.")}111</h3>
     </div>
     <div class="row clearfix"></div>
   </div>
   <div class="row">&nbsp;</div>
   <div class="clearfix">&nbsp;</div>
 
-
-
-<div class="row">
+  <div class="row">
     <div class="col-md-10">
         <p class="text-justify">${_("To allow you to prove your affiliation, ")} ${requester_name} ${_("makes use of the InAcademia service.")}</p>
         <p class="text-justify">${_("Your institution has confirmed your affiliation to Inacademia. We now ask you to consent to confirming your affiliation to ")} ${requester_name}. ${_("In addition, InAcademia may reveal the country and name of your institution. InAcademia will not store any of the data we have received from your institution, nor will we store your consent.")}</p>
         <p class="text-justify"><b>${_('In order to exercise your data subject rights, please save this screen (e.g. make a print screen). It shall be provided with your request.')}</b></p>
         <p class="text-justify">${_("For more details on the information we will provide to")} ${requester_name}, ${_('please select "Details" below.')}</p>
   </div>
-  <div class="col-md-2 aligh-right sp-col-2">
+    <div class="col-md-2 aligh-right sp-col-2">
       % if requester_logo:
       <img id="requester_logo" class="requester_logo" src="${requester_logo}"/>
       % endif
-  </div>
+
 </div>
 <div class="row">
      <div class="col-md-10">${_("More information: ")}<a href="https://inacademia.org/privacy-and-data-protection/">${_("Privacy Statement")}</a></div>
  </div>
 </div>
-<div class="row clearfix"><br/></div>
-<div class="panel-group">
+  <div class="row">
+     <div class="col-md-10">${_("More information: ")}<a href="https://inacademia.org/privacy-and-data-protection/">${_("Privacy Statement")}</a></div>
+ </div>
+
+  <div class="row clearfix"><br/></div>
+  <div class="panel-group">
     <div class="panel panel-default">
         <div class="panel-heading">
             <a data-toggle="collapse" data-target="#attributeDetails" aria-expanded="false" aria-controls="attributeDetails"><h4 class="panel-title">${_("Details")}</h4></a>
@@ -324,18 +326,20 @@ h3.sp {
         </div>
     </div>
 </div>
-    <div class="row"><hr/></div>
+  <div class="row"><hr/></div>
 
-    <div class="row clearfix"><br/></div>
-    <div class="btn-block">
-    <form name="allow_consent" id="allow_consent_form" method="GET">
-      <input name="Yes" value="${_('OK, accept')}" id="submit_ok" formaction="${form_action}/allow" 
-             type="submit" class="btn btn-primary">
-      <input name="No" value="${_('No, cancel')}" id="submit_deny" formaction="${form_action}/deny" 
+  <div class="row clearfix"><br/></div>
+  <div class="btn-block">
+        <form name="allow_consent" id="allow_consent_form" method="GET">
+          <input name="Yes" value="${_('OK, accept')}" id="submit_ok" formaction="${form_action}/allow"
+                 type="submit" class="btn btn-primary">
+          <input name="No" value="${_('No, cancel')}" id="submit_deny" formaction="${form_action}/deny"
              type="submit" class="btn btn-warning">
-    </form>
+        </form>
     </div>
 </div>
+
+<div>
  <footer></footer>
 </div>
 
