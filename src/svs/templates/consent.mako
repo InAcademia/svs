@@ -292,7 +292,11 @@ h3.sp {
       % if requester_logo:
       <img id="requester_logo" class="requester_logo" src="${requester_logo}"/>
       % endif
-    </div>
+
+</div>
+<div class="row">
+     <div class="col-md-10">${_("More information: ")}<a href="https://inacademia.org/privacy-and-data-protection/">${_("Privacy Statement")}</a></div>
+ </div>
 </div>
   <div class="row">
      <div class="col-md-10">${_("More information: ")}<a href="https://inacademia.org/privacy-and-data-protection/">${_("Privacy Statement")}</a></div>
