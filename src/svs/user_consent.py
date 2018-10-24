@@ -1,4 +1,5 @@
 import gettext
+import json
 from urllib.parse import urlparse
 
 import pkg_resources
@@ -8,6 +9,7 @@ from satosa.internal_data import InternalResponse
 from satosa.micro_services import consent
 from satosa.micro_services.base import ResponseMicroService
 from satosa.response import Response
+from satosa.logging_util import satosa_logging
 
 import logging
 logger = logging.getLogger('satosa')
@@ -32,7 +34,10 @@ class UserConsent(ResponseMicroService):
         self.attributes = config.get('attributes', {})
         self.endpoint = '/handle_consent'
         self.template_lookup = TemplateLookup(directories=[pkg_resources.resource_filename('svs', 'templates/')])
-        logger.info("UserConsent micro_service is active")
+        log_target = config.get('log_target', 'consent.log')
+        self.loghandle = open(log_target,"a")
+        satosa_logging(logger, logging.INFO, "UserConsent micro_service is active", None)
+
 
     def _find_requester_name(self, requester_name, language):
         return requester_name
@@ -94,6 +99,19 @@ class UserConsent(ResponseMicroService):
         saved_resp = consent_state['internal_response']
         internal_response = InternalResponse.from_dict(saved_resp)
         del context.state[consent.STATE_KEY]
+
+        log = {}
+        log['router'] = context.state.state_dict['ROUTER']
+        log['sessionid'] = context.state.state_dict['SESSION_ID']
+        log['timestamp'] = saved_resp['auth_info'].get('timestamp')
+        log['idp'] = saved_resp['auth_info'].get('issuer', None)
+        log['rp'] = saved_resp.get('to', None)
+        log['attr'] =saved_resp.get('attr', None)
+
+        satosa_logging(logger, logging.INFO, "log: {}".format(log), context.state)
+        print(json.dumps(log), file=self.loghandle, end="\n")
+        self.loghandle.flush()
+
         return super().process(context, internal_response)
 
     def deny_consent(self, context):
