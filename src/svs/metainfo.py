@@ -20,7 +20,29 @@ class MetaInfo(ResponseMicroService):
         self.exceptions = config.get('exceptions', {})
         logger.info("MetaInfo micro_service is active %s, %s " % (self.displayname, self.country))
 
-    def _get_registration_authority(self, md):
+    def _get_name(self, mds, issuer):
+        name = mds.name(issuer)
+        logger.info("name: {}".format(name))
+        if not name:
+            name = 'Unknown'
+        return name
+        '''
+        md = mds[issuer]
+        logger.info("md:organization: {}".format(md['organization']['organization_name'][0]['text']))
+        logger.info("mdui:displayname: {}".format(md['idpsso_descriptor'][0]['extensions']['extension_elements'][0]['display_name'][0]['text']))
+        if not name:
+            try:
+                name = (md['organization']['organization_name'][0]['text']
+            except:
+                try:
+                    name = md['idpsso_descriptor'][0]['extensions']['extension_elements'][0]['display_name'][0]['text']
+                except:
+                    name = 'Unknown'
+        return name
+        '''
+
+    def _get_registration_authority(self, mds, issuer):
+        md = mds[issuer]
         extensions = md.get('extensions')
         if extensions:
             for ee in extensions.get('extension_elements'):
@@ -35,18 +57,14 @@ class MetaInfo(ResponseMicroService):
         return country
 
     def process(self, context, internal_response):
-        name = "unknown"
-        ra = None
-        country = "unknown"
-
         logger.info("Process MetaInfo")
         issuer = internal_response.auth_info.issuer
         logger.info("Issuer: %s" % issuer)
-        logger.info("internal_data: {}".format(context.internal_data))
         metadata_store = context.internal_data.get('metadata_store')
+        #logger.info("md[issuer] {}".format(metadata_store[issuer]))
         if metadata_store:
-            name = metadata_store.name(issuer)
-            ra = self._get_registration_authority(metadata_store[issuer])
+            name = self._get_name(metadata_store, issuer)
+            ra = self._get_registration_authority(metadata_store, issuer)
             country = self._get_ra_country(ra)
 
         internal_response.attributes[self.displayname] = [name]
