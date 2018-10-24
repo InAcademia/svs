@@ -9,6 +9,8 @@ from satosa.micro_services import consent
 from satosa.micro_services.base import ResponseMicroService
 from satosa.response import Response
 
+import logging
+logger = logging.getLogger('satosa')
 
 def N_(s):
     """
@@ -27,8 +29,10 @@ class UserConsent(ResponseMicroService):
         """
         super().__init__(*args, **kwargs)
         self.logo_base_path = config['logo_base_path']
+        self.attributes = config.get('attributes', {})
         self.endpoint = '/handle_consent'
         self.template_lookup = TemplateLookup(directories=[pkg_resources.resource_filename('svs', 'templates/')])
+        logger.info("UserConsent micro_service is active")
 
     def _find_requester_name(self, requester_name, language):
         return requester_name
@@ -38,12 +42,11 @@ class UserConsent(ResponseMicroService):
         return requester_names.get(language, fallback)
 
     def _attributes_to_release(self, internal_response):
-        attributes = {
-            N_('Affiliation'): internal_response.attributes['affiliation'],
-        }
-        if 'domain' in internal_response.attributes:
-            attributes[N_('Domain')] = internal_response.attributes['domain']
-
+        attributes = {}
+        for attribute, name in self.attributes.items():
+            value = internal_response.attributes.get(attribute, None)
+            if value:
+                attributes[N_(name)] = value
         return attributes
 
     def render_consent(self, consent_state, internal_response, language='en'):
@@ -57,11 +60,12 @@ class UserConsent(ResponseMicroService):
         released_attributes = self._attributes_to_release(internal_response)
         template = self.template_lookup.get_template('consent.mako')
         page = template.render(requester_name=requester_name,
-                               requester_logo=self._normalize_logo(requester_logo),       
+                               requester_logo=self._normalize_logo(requester_logo),
                                released_claims=released_attributes,
                                form_action='/consent{}'.format(self.endpoint),
                                language=language)
 
+        logger.debug("released attributes: {}".format(released_attributes))
         return Response(page, content='text/html')
 
     def process(self, context, internal_response):

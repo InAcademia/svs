@@ -9,6 +9,8 @@ from satosa.exception import SATOSAAuthenticationError, SATOSAProcessingHaltErro
 
 
 class InAcademiaBackend(SAMLBackend):
+    KEY_BACKEND_METADATA_STORE = 'metadata_store'
+
     def __init__(self, outgoing, internal_attributes, config, base_url, name):
         super().__init__(outgoing, internal_attributes, config, base_url, name)
         self.error_uri = config.get('error_uri')
@@ -31,6 +33,10 @@ class InAcademiaBackend(SAMLBackend):
                     if key in auth_response.ava:
                         return auth_response.ava[key][0]
         return None
+
+    def authn_response(self, context, binding):
+        context.internal_data[self.KEY_BACKEND_METADATA_STORE]=self.sp.metadata
+        return super().authn_response(context, binding)
 
     def _translate_response(self, auth_response, state):
         # translate() will handle potentially encrypted SAML Assertions

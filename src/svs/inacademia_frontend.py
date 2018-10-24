@@ -88,7 +88,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         for k in {'signing_key_path', 'client_db_path'}:
             if k not in config:
                 raise ValueError("Missing configuration parameter '{}' for InAcademia frontend.".format(k))
-    
+
     def _read_entity_id_map(self):
         with open(self.config['entity_id_map_path']) as f:
             return json.loads(f.read())

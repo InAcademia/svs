@@ -4,10 +4,9 @@ Micro Service that extracts info from IdP metadata if available
 import logging
 
 from satosa.internal_data import InternalResponse
-from satosa.logging_util import satosa_logging
 from satosa.micro_services.base import ResponseMicroService
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('satosa')
 
 class MetaInfo(ResponseMicroService):
     """
@@ -43,6 +42,7 @@ class MetaInfo(ResponseMicroService):
         logger.info("Process MetaInfo")
         issuer = internal_response.auth_info.issuer
         logger.info("Issuer: %s" % issuer)
+        logger.info("internal_data: {}".format(context.internal_data))
         metadata_store = context.internal_data.get('metadata_store')
         if metadata_store:
             name = metadata_store.name(issuer)
