@@ -1,5 +1,7 @@
 import hashlib
 import random
+import logging
+
 from time import mktime, gmtime
 from urllib.parse import parse_qs
 
@@ -7,6 +9,7 @@ from saml2.saml import NAMEID_FORMAT_PERSISTENT, NAMEID_FORMAT_TRANSIENT
 from satosa.backends.saml2 import SAMLBackend
 from satosa.exception import SATOSAAuthenticationError, SATOSAProcessingHaltError
 
+logger = logging.getLogger('satosa')
 
 class InAcademiaBackend(SAMLBackend):
     KEY_BACKEND_METADATA_STORE = 'metadata_store'
@@ -35,6 +38,9 @@ class InAcademiaBackend(SAMLBackend):
         return None
 
     def authn_response(self, context, binding):
+        if not self.name in context.state:
+            raise SATOSAProcessingHaltError({}, message="State lost", redirect_uri=self.error_uri)
+
         context.internal_data[self.KEY_BACKEND_METADATA_STORE]=self.sp.metadata
         return super().authn_response(context, binding)
 

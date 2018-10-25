@@ -13,7 +13,7 @@ from satosa.response import SeeOther
 from satosa.micro_services import consent
 from svs.affiliation import AFFILIATIONS, get_matching_affiliation
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('satosa')
 
 SCOPE_VALUES = list(AFFILIATIONS.keys()) + ['persistent', 'transient']
 
