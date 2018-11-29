@@ -1,7 +1,8 @@
 import functools
 import json
 import logging
-from urllib.parse import parse_qs, urlparse
+import datetime
+from urllib.parse import parse_qs, urlparse, unquote
 from base64 import urlsafe_b64encode
 from oic.oic.message import AuthorizationErrorResponse
 from oic.oic.provider import RegistrationEndpoint, AuthorizationEndpoint, TokenEndpoint, UserinfoEndpoint
@@ -67,6 +68,7 @@ def claims_request_is_valid_for_client(provider, authentication_request):
 
 class InAcademiaFrontend(OpenIDConnectFrontend):
     def __init__(self, auth_req_callback_func, internal_attributes, config, base_url, name):
+        self.logfile = config.get('log_target', '/var/svs/ia_frontend.log')
         config['provider'] = {'response_types_supported': ['id_token'], 'scopes_supported': ['openid'] + SCOPE_VALUES}
         super().__init__(auth_req_callback_func, internal_attributes, config, base_url, name)
         self.entity_id_map = self._read_entity_id_map()
@@ -139,6 +141,23 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         return self.auth_req_callback_func(context, internal_request)
 
     def handle_authn_response(self, context, internal_resp):
+        # Log original request and reply
+        logline = {}
+        logline['time'] = str(datetime.datetime.now())
+        logline['request'] = unquote(context.state['InAcademia']['oidc_request'])
+        logline['resp'] = internal_resp.to_dict()
+
+        # Explicitly open and close the logfile to force data to be written
+        try:
+            loghandle = open(self.logfile,"a")
+            print(json.dumps(logline), file=loghandle, end="\n")
+            loghandle.close()
+        except:
+            logger.debug('Failed to write logfile')
+
+        # Log result to debug log as well
+        logger.debug('log: {}'.format(logline))
+
         auth_req = self._get_authn_request_from_state(context.state)
         # User might not give us consent to release affiliation
         if 'affiliation' in internal_resp.attributes:
