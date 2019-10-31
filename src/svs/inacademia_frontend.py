@@ -12,6 +12,7 @@ from satosa.internal_data import InternalRequest
 from satosa.response import SeeOther
 from satosa.micro_services import consent
 from svs.affiliation import AFFILIATIONS, get_matching_affiliation
+from svs.auth_grant_profile_poc import AuthGrantProfilePoc
 
 logger = logging.getLogger('satosa')
 
@@ -147,9 +148,15 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
             matching_affiliation = get_matching_affiliation(scope, affiliation_attribute)
 
             if matching_affiliation:
+                auth_grant_plugin = AuthGrantProfilePoc()
+                auth_grant_claims = internal_resp.attributes
+                encoded_data = auth_grant_plugin.encryptData(str(auth_grant_claims))
+                logger.debug('int resp encoded: {}'.format(encoded_data))
+                decrypted_data = auth_grant_plugin.decryptData(encoded_data)
+                logger.debug('int resp decrypted: {}'.format(decrypted_data))
                 return super().handle_authn_response(context, internal_resp,
                                                      {'auth_time': internal_resp.auth_info.timestamp,
-                                                      'requested_scopes': {'values': scope}})
+                                                      'requested_scopes': {'values': scope}, 'authG': encoded_data})
         # User's affiliation was not released or was not the one requested so return an error
         # If the client sent us a state parameter, we should reflect it back according to the spec
         if 'state' in auth_req:
