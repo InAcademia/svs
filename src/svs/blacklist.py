@@ -12,7 +12,7 @@ logger = logging.getLogger('satosa')
 
 class Blacklist(ResponseMicroService):
     """
-    Metadata info extracting micro_service
+    Micro Service that denies authResponses from blacklisted IdP's
     """
 
     def __init__(self, config, internal_attributes, *args, **kwargs):
