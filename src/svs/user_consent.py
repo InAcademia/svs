@@ -10,6 +10,8 @@ from satosa.micro_services import consent
 from satosa.micro_services.base import ResponseMicroService
 from satosa.response import Response
 from satosa.logging_util import satosa_logging
+import base64
+import os
 
 import logging
 logger = logging.getLogger('satosa')
@@ -144,11 +146,25 @@ class UserConsent(ResponseMicroService):
 
     def _normalize_logo(self, requester_logo):
         if requester_logo:
+            # logo is URL supplied in cdb.json
             parsed_path = urlparse(requester_logo)
             if parsed_path.scheme in ['http', 'https']:
-                normalized_path = requester_logo
+                satosa_logging(logger, logging.INFO, 'Logo is URL', None)
+                return requester_logo
+            # logo is a file locally stored with filename supplied in cdb.json
             else:
+                satosa_logging(logger, logging.INFO, 'Logo is on local directory, base path is: {}'.format(self.logo_base_path), None)
                 normalized_path = os.path.join(self.logo_base_path, requester_logo)
-            return normalized_path
+                return self._convert_image_toBase64(normalized_path)
         else:
             return None
+
+    def _convert_image_toBase64(self, filePath):
+        with open(filePath, "rb") as imageFile:
+            strBase64 = base64.b64encode(imageFile.read())
+            imageSource = 'data:image/jpg;base64,{}'.format(strBase64)
+            # remove  leading b'
+            imageSource = imageSource.replace('b\'', '')
+            # remove  laggiing '
+            imageSource = imageSource.replace('\'', '')
+            return imageSource
