@@ -6,13 +6,16 @@ import pkg_resources
 from mako.lookup import TemplateLookup
 from satosa.exception import SATOSAAuthenticationError
 from satosa.internal_data import InternalResponse
-from satosa.micro_services import consent
 from satosa.micro_services.base import ResponseMicroService
 from satosa.response import Response
 from satosa.logging_util import satosa_logging
+from oic.oic.message import AuthorizationRequest
+from svs.affiliation import AFFILIATIONS
 
 import logging
 logger = logging.getLogger('satosa')
+
+STATE_KEY = "CONSENT"
 
 def N_(s):
     """
@@ -70,7 +73,7 @@ class UserConsent(ResponseMicroService):
                                form_action='/consent{}'.format(self.endpoint),
                                language=language)
 
-        logger.debug("released attributes: {}".format(released_attributes))
+        satosa_logging(logger, logging.INFO, "released attributes: {}".format(released_attributes), consent_state)
         return Response(page, content='text/html')
 
     def process(self, context, internal_response):
@@ -79,9 +82,15 @@ class UserConsent(ResponseMicroService):
         :param context: request context
         :param internal_response: the internal response
         """
-        consent_state = context.state[consent.STATE_KEY]
+        consent_state = context.state[STATE_KEY]
+
         internal_response.attributes = {k: v for k, v in internal_response.attributes.items() if
                                         k in consent_state['filter']}
+
+        # WatchOut!, 'InAcademia' is hardcoded because I couldn't transport scopes
+        # independently from the InAcademia Frontend to here.
+        scope = AuthorizationRequest().deserialize(context.state['InAcademia']["oidc_request"]).get('scope', [])
+        internal_response.attributes['affiliation'] = [a for a in AFFILIATIONS if a in scope]
 
         consent_state['internal_response'] = internal_response.to_dict()
         return self.render_consent(consent_state, internal_response)
@@ -95,10 +104,10 @@ class UserConsent(ResponseMicroService):
         :param context: response context
         :return: response
         """
-        consent_state = context.state[consent.STATE_KEY]
+        consent_state = context.state[STATE_KEY]
         saved_resp = consent_state['internal_response']
         internal_response = InternalResponse.from_dict(saved_resp)
-        del context.state[consent.STATE_KEY]
+        del context.state[STATE_KEY]
 
         log = {}
         log['router'] = context.state.state_dict['ROUTER']
@@ -123,11 +132,11 @@ class UserConsent(ResponseMicroService):
         :param context: response context
         :return: response
         """
-        del context.state[consent.STATE_KEY]
+        del context.state[STATE_KEY]
         raise SATOSAAuthenticationError(context.state, 'Consent was denied by the user.')
 
     def change_language(self, context):
-        consent_state = context.state[consent.STATE_KEY]
+        consent_state = context.state[STATE_KEY]
         saved_resp = consent_state['internal_response']
         internal_response = InternalResponse.from_dict(saved_resp)
 
