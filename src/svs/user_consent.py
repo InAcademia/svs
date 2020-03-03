@@ -87,10 +87,12 @@ class UserConsent(ResponseMicroService):
         internal_response.attributes = {k: v for k, v in internal_response.attributes.items() if
                                         k in consent_state['filter']}
 
+        affiliation = internal_response.attributes['affiliation']
+
         # WatchOut!, 'InAcademia' is hardcoded because I couldn't transport scopes
         # independently from the InAcademia Frontend to here.
         scope = AuthorizationRequest().deserialize(context.state['InAcademia']["oidc_request"]).get('scope', [])
-        internal_response.attributes['affiliation'] = [a for a in AFFILIATIONS if a in scope]
+        internal_response.attributes['affiliation'] = [a for a in affiliation if a in AFFILIATIONS and a in scope]
 
         consent_state['internal_response'] = internal_response.to_dict()
         return self.render_consent(consent_state, internal_response)
