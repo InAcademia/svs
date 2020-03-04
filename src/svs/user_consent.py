@@ -89,9 +89,13 @@ class UserConsent(ResponseMicroService):
 
         affiliation = internal_response.attributes['affiliation']
 
-        # WatchOut!, 'InAcademia' is hardcoded because I couldn't transport scopes
-        # independently from the InAcademia Frontend to here.
-        scope = AuthorizationRequest().deserialize(context.state['InAcademia']["oidc_request"]).get('scope', [])
+        # We stored scope in frontend module but there is no
+        # safe way to get unknown state keys in this version of Satosa.
+        try:
+            scope = context.state['scope']
+        except KeyError:
+            scope = []
+        #satosa_logging(logger, logging.DEBUG, "scope: {}".format(scope), consent_state)
         internal_response.attributes['affiliation'] = [a for a in affiliation if a in AFFILIATIONS and a in scope]
 
         consent_state['internal_response'] = internal_response.to_dict()
