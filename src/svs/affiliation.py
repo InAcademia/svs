@@ -13,7 +13,10 @@ def _is_employee(affiliation):
 
 
 def _is_member(affiliation):
-    return _first_matching_value(['member'], affiliation)
+    return (_first_matching_value(['member'], affiliation) or
+            _is_student(affiliation) or
+            _is_employee(affiliation) or
+            _is_faculty_or_staff(affiliation))
 
 
 def _is_alumni(affiliation):
@@ -25,7 +28,9 @@ def _is_faculty_or_staff(affiliation):
 
 
 def _is_affiliated(affiliation):
-    return _is_student(affiliation) or _is_employee(affiliation) or _is_member(affiliation)
+    return (_is_student(affiliation) or
+            _is_employee(affiliation) or
+            _is_member(affiliation))
 
 
 def _first_matching_value(accepted_values, bag):
@@ -35,11 +40,11 @@ def _first_matching_value(accepted_values, bag):
 
     return None
 
-
 AFFILIATIONS = {
     'affiliated': _is_affiliated,
     'student': _is_student,
     'employee': _is_employee,
     'faculty+staff': _is_faculty_or_staff,
-    'alum': _is_alumni
+    'alum': _is_alumni,
+    'member': _is_member
 }

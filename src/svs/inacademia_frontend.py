@@ -137,6 +137,11 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         internal_request.approved_attributes.append('affiliation')
         #Add the target_backend name so that we don't have to use scope nased routing
         context.target_backend = self.config['backend_name']
+
+        # Extract scope from request so we can use it later in consent
+        auth_req = self._get_authn_request_from_state(context.state)
+        context.state['scope'] = auth_req['scope']
+
         return self.auth_req_callback_func(context, internal_request)
 
     def handle_authn_response(self, context, internal_resp):
