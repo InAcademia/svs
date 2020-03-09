@@ -286,7 +286,7 @@ h3.sp {
         <p class="text-justify">${_("To allow you to prove your affiliation, ")} ${requester_name} ${_("makes use of the InAcademia service.")}</p>
         <p class="text-justify">${_("Your institution has confirmed your affiliation to Inacademia. We now ask you to consent to confirming your affiliation to ")} ${requester_name}. ${_("In addition, InAcademia may reveal the country and name of your institution. InAcademia will not store any of the data we have received from your institution, nor will we store your consent.")}</p>
         <p class="text-justify"><b>${_('In order to exercise your data subject rights, please save this screen (e.g. make a print screen). It shall be provided with your request.')}</b></p>
-        <p class="text-justify">${_("For more details on the information we will provide to")} ${requester_name}, ${_('please select "Details" below.')}</p>
+        <p class="text-justify">${_("For more details on the information we will use to evaluate the response we will give to")} ${requester_name}, ${_('please select "Details" below.')}</p>
   </div>
     <div class="col-md-2 aligh-right sp-col-2">
       % if requester_logo:
