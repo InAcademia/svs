@@ -39,31 +39,31 @@ class InAcademiaBackend(SAMLBackend):
         return None
 
     def authn_request(self, context, entity_id):
-        transaction_log(context.request.get("id", "n/a"),
-                        self.config.get("request_exit_order", 400),
-                        "inacademia_backend", "request", "exit",
-                        context.request("state", "success"),
-                        context.request("code", ""))
+        result = super().authn_request(context, entity_id)
+        
+        if context and context.request:
+            transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
+                            self.config.get("request_exit_order", 400),
+                            "inacademia_backend", "request", "exit", "success",
+                            context.request("code", ""), context)
 
-        return super().authn_request(context, entity_id)
+        return result
 
     def authn_response(self, context, binding):
-        transaction_log(context.request.get("id", "n/a"),
+        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("response_entry_order", 500),
-                        "inacademia_backend", "response", "entry",
-                        context.request.get("state", "success"),
-                        context.request.get("code", ""))
+                        "inacademia_backend", "response", "entry", "success",
+                        context.request.get("code", ""), context)
 
         if not self.name in context.state:
             raise SATOSAProcessingHaltError({}, message="State lost", redirect_uri=self.error_uri)
 
         context.internal_data[self.KEY_BACKEND_METADATA_STORE]=self.sp.metadata
 
-        transaction_log(context.request.get("id", "n/a"),
+        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("response_exit_order", 600),
-                        "inacademia_backend", "response", "exit",
-                        context.request.get("state", "success"),
-                        context.request.get("code", ""))
+                        "inacademia_backend", "response", "exit", "success",
+                        context.request.get("code", ""), context)
 
         return super().authn_response(context, binding)
 

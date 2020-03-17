@@ -32,6 +32,7 @@ class UserConsent(ResponseMicroService):
         Constructor.
         """
         super().__init__(*args, **kwargs)
+        self.config = config
         self.logo_base_path = config['logo_base_path']
         self.attributes = config.get('attributes', {})
         self.endpoint = '/handle_consent'
@@ -81,22 +82,26 @@ class UserConsent(ResponseMicroService):
         :param context: request context
         :param internal_response: the internal response
         """
-        transaction_log(context.request.get("id", "n/a"),
-                        self.config.get("process_entry_order", 700),
-                        "user_consent", "process", "entry",
-                        context.request.get("state", "success"),
-                        context.request.get("code", ""))
+        if context and context.request:
+#             transaction_log(internal_response.to_dict().get('usr_id', context.state.state_dict.get("SESSION_ID", "n/a")),
+            transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
+                            self.config.get("process_entry_order", 700),
+                            "user_consent", "process", "entry", "success",
+                            context.request.get("code", ""), context)
+
+        consent_state = context.state[STATE_KEY]
 
         internal_response.attributes = {k: v for k, v in internal_response.attributes.items() if
                                         k in consent_state['filter']}
 
         consent_state['internal_response'] = internal_response.to_dict()
 
-        transaction_log(context.request.get("id", "n/a"),
-                        self.config.get("process_exit_order", 800),
-                        "user_consent", "process", "exit",
-                        context.request.get("state", "success"),
-                        context.request.get("code", ""))
+        if context and context.request:
+#             transaction_log(internal_response.to_dict().get('usr_id', context.state.state_dict.get("SESSION_ID", "n/a")),
+            transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
+                            self.config.get("process_exit_order", 800),
+                            "user_consent", "process", "exit", "success",
+                            context.request.get("code", ""), context)
 
         return self.render_consent(consent_state, internal_response)
 
@@ -126,11 +131,12 @@ class UserConsent(ResponseMicroService):
         print(json.dumps(log), file=self.loghandle, end="\n")
         self.loghandle.flush()
 
-        transaction_log(context.request.get("id", "n/a"),
+#         transaction_log(internal_response.to_dict().get('usr_id', context.state.state_dict.get("SESSION_ID", "n/a")),
+        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("consent_exit_order", 1000),
                         "user_consent", "accept", "exit",
-                        context.request.get("state", "success"),
-                        context.request.get("code", ""))
+                        context.request.get("Yes", "success"),
+                        context.request.get("code", ""), context)
 
         return super().process(context, internal_response)
 
@@ -143,7 +149,17 @@ class UserConsent(ResponseMicroService):
         :param context: response context
         :return: response
         """
+        consent_state = context.state[STATE_KEY]
+        saved_resp = consent_state['internal_response']
+        internal_response = InternalResponse.from_dict(saved_resp)
         del context.state[STATE_KEY]
+#         transaction_log(internal_response.to_dict().get('usr_id', context.state.state_dict.get("SESSION_ID", "n/a")),
+        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
+                        self.config.get("consent_exit_order", 1000),
+                        "user_consent", "deny", "exit",
+                        context.request.get("No", "cancel"),
+                        context.request.get("code", ""), context)
+
         raise SATOSAAuthenticationError(context.state, 'Consent was denied by the user.')
 
     def change_language(self, context):

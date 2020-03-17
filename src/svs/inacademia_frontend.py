@@ -139,11 +139,10 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         #Add the target_backend name so that we don't have to use scope nased routing
         context.target_backend = self.config['backend_name']
 
-        transaction_log(context.request.get("id", "n/a"),
+        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("request_exit_order", 200),
-                        "inacademia_frontend", "request", "exit",
-                        context.request.get("state", "success"),
-                        context.request.get("code", ""))
+                        "inacademia_frontend", "request", "exit", "success",
+                        context.request.get("code", ""), context)
 
         return self.auth_req_callback_func(context, internal_request)
 
@@ -168,11 +167,11 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         del context.state[self.name]
         http_response = auth_error.request(auth_req['redirect_uri'], should_fragment_encode(auth_req))
 
-        transaction_log(context.request.get("id", "n/a"),
+#         transaction_log(internal_resp.to_dict().get('usr_id', context.state.state_dict.get("SESSION_ID", "n/a")),
+        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("response_exit_order", 1200),
-                        "inacademia_frontend", "response", "exit",
-                        context.request.get("state", "success"),
-                        context.request.get("code", ""))
+                        "inacademia_frontend", "response", "exit", "success",
+                        context.request.get("code", ""), context)
 
         return SeeOther(http_response)
 
