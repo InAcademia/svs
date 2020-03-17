@@ -9,6 +9,7 @@ from satosa.internal_data import InternalResponse
 from satosa.micro_services.base import ResponseMicroService
 from satosa.response import Response
 from satosa.logging_util import satosa_logging
+from util.transaction_flow_logging import transaction_log
 
 import logging
 logger = logging.getLogger('satosa')
@@ -80,12 +81,23 @@ class UserConsent(ResponseMicroService):
         :param context: request context
         :param internal_response: the internal response
         """
-        consent_state = context.state[STATE_KEY]
+        transaction_log(context.request.get("id", "n/a"),
+                        self.config.get("process_entry_order", 700),
+                        "user_consent", "process", "entry",
+                        context.request.get("state", "success"),
+                        context.request.get("code", ""))
 
         internal_response.attributes = {k: v for k, v in internal_response.attributes.items() if
                                         k in consent_state['filter']}
 
         consent_state['internal_response'] = internal_response.to_dict()
+
+        transaction_log(context.request.get("id", "n/a"),
+                        self.config.get("process_exit_order", 800),
+                        "user_consent", "process", "exit",
+                        context.request.get("state", "success"),
+                        context.request.get("code", ""))
+
         return self.render_consent(consent_state, internal_response)
 
     def accept_consent(self, context):
@@ -113,6 +125,12 @@ class UserConsent(ResponseMicroService):
         satosa_logging(logger, logging.INFO, "log: {}".format(log), context.state)
         print(json.dumps(log), file=self.loghandle, end="\n")
         self.loghandle.flush()
+
+        transaction_log(context.request.get("id", "n/a"),
+                        self.config.get("consent_exit_order", 1000),
+                        "user_consent", "accept", "exit",
+                        context.request.get("state", "success"),
+                        context.request.get("code", ""))
 
         return super().process(context, internal_response)
 

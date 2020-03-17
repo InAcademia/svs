@@ -5,3 +5,8 @@ dist/
 doc/_*
 *.log
 .tox/
+
+# eclipse
+.project
+.pydevproject
+.settings

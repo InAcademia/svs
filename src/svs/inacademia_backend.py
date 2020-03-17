@@ -8,6 +8,7 @@ from urllib.parse import parse_qs
 from saml2.saml import NAMEID_FORMAT_PERSISTENT, NAMEID_FORMAT_TRANSIENT
 from satosa.backends.saml2 import SAMLBackend
 from satosa.exception import SATOSAAuthenticationError, SATOSAProcessingHaltError
+from util.transaction_flow_logging import transaction_log
 
 logger = logging.getLogger('satosa')
 
@@ -37,11 +38,33 @@ class InAcademiaBackend(SAMLBackend):
                         return auth_response.ava[key][0]
         return None
 
+    def authn_request(self, context, entity_id):
+        transaction_log(context.request.get("id", "n/a"),
+                        self.config.get("request_exit_order", 400),
+                        "inacademia_backend", "request", "exit",
+                        context.request("state", "success"),
+                        context.request("code", ""))
+
+        return super().authn_request(context, entity_id)
+
     def authn_response(self, context, binding):
+        transaction_log(context.request.get("id", "n/a"),
+                        self.config.get("response_entry_order", 500),
+                        "inacademia_backend", "response", "entry",
+                        context.request.get("state", "success"),
+                        context.request.get("code", ""))
+
         if not self.name in context.state:
             raise SATOSAProcessingHaltError({}, message="State lost", redirect_uri=self.error_uri)
 
         context.internal_data[self.KEY_BACKEND_METADATA_STORE]=self.sp.metadata
+
+        transaction_log(context.request.get("id", "n/a"),
+                        self.config.get("response_exit_order", 600),
+                        "inacademia_backend", "response", "exit",
+                        context.request.get("state", "success"),
+                        context.request.get("code", ""))
+
         return super().authn_response(context, binding)
 
     def _translate_response(self, auth_response, state):
