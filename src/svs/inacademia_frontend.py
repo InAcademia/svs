@@ -166,7 +166,6 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         del context.state[self.name]
         http_response = auth_error.request(auth_req['redirect_uri'], should_fragment_encode(auth_req))
 
-#         transaction_log(internal_resp.to_dict().get('usr_id', context.state.state_dict.get("SESSION_ID", "n/a")),
         transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("response_exit_order", 1200),
                         "inacademia_frontend", "response", "exit", "success")

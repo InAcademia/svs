@@ -82,7 +82,6 @@ class UserConsent(ResponseMicroService):
         :param context: request context
         :param internal_response: the internal response
         """
-#         transaction_log(internal_response.to_dict().get('usr_id', context.state.state_dict.get("SESSION_ID", "n/a")),
         transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("process_entry_order", 700),
                         "user_consent", "process", "entry", "success")
@@ -94,7 +93,6 @@ class UserConsent(ResponseMicroService):
 
         consent_state['internal_response'] = internal_response.to_dict()
 
-#         transaction_log(internal_response.to_dict().get('usr_id', context.state.state_dict.get("SESSION_ID", "n/a")),
         transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("process_exit_order", 800),
                         "user_consent", "process", "exit", "success")
@@ -127,7 +125,6 @@ class UserConsent(ResponseMicroService):
         print(json.dumps(log), file=self.loghandle, end="\n")
         self.loghandle.flush()
 
-#         transaction_log(internal_response.to_dict().get('usr_id', context.state.state_dict.get("SESSION_ID", "n/a")),
         transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("consent_exit_order", 1000),
                         "user_consent", "accept", "exit", "success")
@@ -144,7 +141,6 @@ class UserConsent(ResponseMicroService):
         :return: response
         """
         del context.state[STATE_KEY]
-#         transaction_log(internal_response.to_dict().get('usr_id', context.state.state_dict.get("SESSION_ID", "n/a")),
         transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("consent_exit_order", 1000),
                         "user_consent", "deny", "exit", "cancel")
