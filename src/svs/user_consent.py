@@ -143,9 +143,6 @@ class UserConsent(ResponseMicroService):
         :param context: response context
         :return: response
         """
-        consent_state = context.state[STATE_KEY]
-        saved_resp = consent_state['internal_response']
-        internal_response = InternalResponse.from_dict(saved_resp)
         del context.state[STATE_KEY]
 #         transaction_log(internal_response.to_dict().get('usr_id', context.state.state_dict.get("SESSION_ID", "n/a")),
         transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
