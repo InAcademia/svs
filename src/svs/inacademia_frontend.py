@@ -141,8 +141,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
 
         transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("request_exit_order", 200),
-                        "inacademia_frontend", "request", "exit", "success",
-                        context.request.get("code", ""), context)
+                        "inacademia_frontend", "request", "exit", "success")
 
         return self.auth_req_callback_func(context, internal_request)
 
@@ -170,8 +169,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
 #         transaction_log(internal_resp.to_dict().get('usr_id', context.state.state_dict.get("SESSION_ID", "n/a")),
         transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("response_exit_order", 1200),
-                        "inacademia_frontend", "response", "exit", "success",
-                        context.request.get("code", ""), context)
+                        "inacademia_frontend", "response", "exit", "success")
 
         return SeeOther(http_response)
 
