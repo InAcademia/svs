@@ -12,3 +12,4 @@ def transaction_log(id, order, component, type, location, status, description = 
                       ('timestamp', datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]),
                 ])
     logger.info('%s::%s::%s' % (id, order, log_entry))
+    
