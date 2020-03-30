@@ -13,6 +13,7 @@ from satosa.response import SeeOther
 from satosa.micro_services import consent
 from svs.affiliation import AFFILIATIONS, get_matching_affiliation
 from dateutil import parser
+from util.transaction_flow_logging import transaction_log
 
 logger = logging.getLogger('satosa')
 
@@ -138,6 +139,10 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         #Add the target_backend name so that we don't have to use scope nased routing
         context.target_backend = self.config['backend_name']
 
+        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
+                        self.config.get("request_exit_order", 200),
+                        "inacademia_frontend", "request", "exit", "success")
+
         return self.auth_req_callback_func(context, internal_request)
 
     def handle_authn_response(self, context, internal_resp):
@@ -160,6 +165,11 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
             auth_error = AuthorizationErrorResponse(error='access_denied')
         del context.state[self.name]
         http_response = auth_error.request(auth_req['redirect_uri'], should_fragment_encode(auth_req))
+
+        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
+                        self.config.get("response_exit_order", 1200),
+                        "inacademia_frontend", "response", "exit", "success")
+
         return SeeOther(http_response)
 
     def register_endpoints(self, backend_names):
