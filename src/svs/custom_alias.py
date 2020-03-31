@@ -21,7 +21,7 @@ class CustomAlias(RequestMicroService):
         super().__init__(*args, **kwargs)
         # self.config = config
         if 'locations' in config:
-            self.locations = config['locations']
+            self.locations = config.get('locations', {})
 
     def register_endpoints(self):
         url_map = []
