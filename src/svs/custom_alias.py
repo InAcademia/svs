@@ -35,9 +35,9 @@ class CustomAlias(RequestMicroService):
         path = context._path
         endpoint = path.split("/")[0]
         target = path[len(endpoint) + 1:]
-        alias = "%s/%s" % (self.locations[endpoint], target)
-        logger.info("{} _handle: {} - {} - {}".format(self.logprefix, endpoint, target, alias))
         try:
+            alias = "%s/%s" % (self.locations[endpoint], target)
+            logger.info("{} _handle: {} - {} - {}".format(self.logprefix, endpoint, target, alias))
             response = open(alias, 'rb').read()
             mimetype = mimetypes.guess_type(alias)[0]
             logger.debug("mimetype {}".format(mimetype))
