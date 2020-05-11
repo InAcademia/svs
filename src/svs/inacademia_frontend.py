@@ -23,6 +23,11 @@ SCOPE_VALUES = list(AFFILIATIONS.keys()) + ['persistent', 'transient']
 def scope_is_valid_for_client(provider, authentication_request):
     # Invalid scope requesting validation of more than one affiliation type
     requested_affiliations = [a for a in AFFILIATIONS if a in authentication_request['scope']]
+
+    if len(requested_affiliations) == 0:
+        raise InvalidAuthenticationRequest('Requested validation not allowed.', authentication_request,
+                                           oauth_error='invalid_scope')
+
     if len(requested_affiliations) != 1:
         raise InvalidAuthenticationRequest('Requested validation of too many affiliations.', authentication_request,
                                            oauth_error='invalid_scope')
