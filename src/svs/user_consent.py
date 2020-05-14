@@ -93,10 +93,6 @@ class UserConsent(ResponseMicroService):
 
         consent_state['internal_response'] = internal_response.to_dict()
 
-        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
-                        self.config.get("process_exit_order", 800),
-                        "user_consent", "process", "exit", "success")
-
         return self.render_consent(consent_state, internal_response)
 
     def accept_consent(self, context):
@@ -142,7 +138,7 @@ class UserConsent(ResponseMicroService):
         """
         del context.state[STATE_KEY]
         transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
-                        self.config.get("consent_exit_order", 1000),
+                        self.config.get("consent_exit_order", 1010),
                         "user_consent", "deny", "exit", "cancel")
 
         raise SATOSAAuthenticationError(context.state, 'Consent was denied by the user.')
