@@ -13,7 +13,7 @@ from satosa.response import SeeOther
 from satosa.micro_services import consent
 from svs.affiliation import AFFILIATIONS, get_matching_affiliation
 from dateutil import parser
-from .util.transaction_flow_logging import transaction_log
+from util.transaction_flow_logging import transaction_log
 
 logger = logging.getLogger('satosa')
 
