@@ -23,6 +23,7 @@ setup(
             'data/i18n/locale/*/LC_MESSAGES/*.mo',
             'templates/*.mako',
             'site/static/*',
+            'util/*',
         ],
     },
     message_extractors={
