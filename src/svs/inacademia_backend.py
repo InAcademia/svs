@@ -8,7 +8,7 @@ from urllib.parse import parse_qs
 from saml2.saml import NAMEID_FORMAT_PERSISTENT, NAMEID_FORMAT_TRANSIENT
 from satosa.backends.saml2 import SAMLBackend
 from satosa.exception import SATOSAAuthenticationError, SATOSAProcessingHaltError
-from util.transaction_flow_logging import transaction_log
+from .util.transaction_flow_logging import transaction_log
 
 logger = logging.getLogger('satosa')
 
