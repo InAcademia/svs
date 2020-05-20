@@ -24,6 +24,9 @@ setup(
             'templates/*.mako',
             'site/static/*',
         ],
+        'util': [
+            'util/*',
+        ],
     },
     message_extractors={
         'src/svs': [

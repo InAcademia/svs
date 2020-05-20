@@ -9,7 +9,7 @@ from satosa.internal_data import InternalResponse
 from satosa.micro_services.base import ResponseMicroService
 from satosa.response import Response
 from satosa.logging_util import satosa_logging
-from util.transaction_flow_logging import transaction_log
+from .util.transaction_flow_logging import transaction_log
 
 import logging
 logger = logging.getLogger('satosa')
