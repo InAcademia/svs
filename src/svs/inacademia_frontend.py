@@ -122,6 +122,10 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
 
     def handle_authn_request(self, context):
         internal_request = super()._handle_authn_request(context)
+        
+        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
+                        self.config.get("request_exit_order", 100),
+                        "inacademia_frontend", "request", "entry", "success")
 
         if not isinstance(internal_request, InternalRequest):
             # error message
@@ -159,11 +163,20 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
             matching_affiliation = get_matching_affiliation(scope, affiliation_attribute)
 
             if matching_affiliation:
+                transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
+                        self.config.get("response_exit_order", 1200),
+                        "inacademia_frontend", "response", "exit", "success")
+                
                 return super().handle_authn_response(context, internal_resp,
                                                      {'auth_time': parser.parse(internal_resp.auth_info.timestamp).timestamp(),
                                                       'requested_scopes': {'values': scope}})
+        
         # User's affiliation was not released or was not the one requested so return an error
         # If the client sent us a state parameter, we should reflect it back according to the spec
+        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
+                        self.config.get("response_exit_order", 1210),
+                        "inacademia_frontend", "response", "exit", "failed")
+
         if 'state' in auth_req:
             auth_error = AuthorizationErrorResponse(error='access_denied', state=auth_req['state'])
         else:
@@ -171,10 +184,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         del context.state[self.name]
         http_response = auth_error.request(auth_req['redirect_uri'], should_fragment_encode(auth_req))
 
-        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
-                        self.config.get("response_exit_order", 1200),
-                        "inacademia_frontend", "response", "exit", "success")
-
+        
         return SeeOther(http_response)
 
     def register_endpoints(self, backend_names):

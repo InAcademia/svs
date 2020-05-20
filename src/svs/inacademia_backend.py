@@ -69,6 +69,11 @@ class InAcademiaBackend(SAMLBackend):
         # import pdb; pdb.set_trace()
         internal_resp = super()._translate_response(auth_response, state)
         if not any(affiliation_attr in auth_response.ava for affiliation_attr in self.config['affiliation_attributes']):
+            
+            transaction_log(state.state_dict.get("SESSION_ID", "n/a"),
+                        self.config.get("response_exit_order", 610),
+                        "inacademia_backend", "response", "exit", "fail")
+                        
             raise SATOSAProcessingHaltError(state=state, message="No affiliation attribute from IdP", redirect_uri=self.error_uri)
 
         params = parse_qs(state['InAcademia']['oidc_request'])
@@ -78,6 +83,11 @@ class InAcademiaBackend(SAMLBackend):
             scope = 'transient'
         internal_resp.user_id = self._get_user_id(auth_response, scope)
         if not internal_resp.user_id:
+            
+            transaction_log(state.state_dict.get("SESSION_ID", "n/a"),
+                        self.config.get("response_exit_order", 620),
+                        "inacademia_backend", "response", "exit", "fail")
+            
             raise SATOSAAuthenticationError(state, 'Failed to construct persistent user id from IdP response.')
 
         return internal_resp
