@@ -67,7 +67,7 @@
 </div>
   </div>
   <div class="row">
-     <div class="col-md-10">${_("More information: ")}<a href="https://inacademia.org/privacy-and-data-protection/">${_("Privacy Statement")}</a></div>
+     <div class="col-md-10">${_("More information: ")}<a href="https://inacademia.org/privacy-statement/">${_("Privacy Statement")}</a></div>
   </div>
 
   <div class="row clearfix"><br/></div>
