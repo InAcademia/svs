@@ -43,23 +43,31 @@ class InAcademiaBackend(SAMLBackend):
         
         transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("request_exit_order", 400),
-                        "inacademia_backend", "request", "exit", "success")
+                        "inacademia_backend", "request", "exit", "success", entity_id, '', 'Send request to IdP')
 
         return result
 
     def authn_response(self, context, binding):
+        
+        resp_idp_entityid = list(self.sp.metadata.with_descriptor("idpsso").keys())[0]
+        
         transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("response_entry_order", 500),
-                        "inacademia_backend", "response", "entry", "success")
+                        "inacademia_backend", "response", "entry", "success", '', resp_idp_entityid, 'Recieved response from IdP')
 
         if not self.name in context.state:
+            transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
+                        self.config.get("response_entry_order", 510),
+                        "inacademia_backend", "response", "entry", "failed", '', resp_idp_entityid, 'Recieved response from IdP, but state lost', 'internal')
+            
             raise SATOSAProcessingHaltError({}, message="State lost", redirect_uri=self.error_uri)
 
         context.internal_data[self.KEY_BACKEND_METADATA_STORE]=self.sp.metadata
-
-        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
-                        self.config.get("response_exit_order", 600),
-                        "inacademia_backend", "response", "exit", "success")
+        
+        # ToDo: does this add any value?
+        #transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
+        #                self.config.get("response_exit_order", 600),
+        #                "inacademia_backend", "response", "exit", "success", '', '', '')
 
         return super().authn_response(context, binding)
 
@@ -68,11 +76,13 @@ class InAcademiaBackend(SAMLBackend):
         # auth_response object will also be modified
         # import pdb; pdb.set_trace()
         internal_resp = super()._translate_response(auth_response, state)
+        resp_idp_entityid = list(self.sp.metadata.with_descriptor("idpsso").keys())[0]
+
         if not any(affiliation_attr in auth_response.ava for affiliation_attr in self.config['affiliation_attributes']):
             
             transaction_log(state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("response_exit_order", 610),
-                        "inacademia_backend", "response", "exit", "fail")
+                        "inacademia_backend", "response", "exit", "fail",'',resp_idp_entityid,'No affiliation attribute from IdP', 'idp')
                         
             raise SATOSAProcessingHaltError(state=state, message="No affiliation attribute from IdP", redirect_uri=self.error_uri)
 
@@ -86,7 +96,7 @@ class InAcademiaBackend(SAMLBackend):
             
             transaction_log(state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("response_exit_order", 620),
-                        "inacademia_backend", "response", "exit", "fail")
+                        "inacademia_backend", "response", "exit", "fail",resp_idp_entityid,'Failed to construct persistent user id from IdP response', 'idp')
             
             raise SATOSAAuthenticationError(state, 'Failed to construct persistent user id from IdP response.')
 

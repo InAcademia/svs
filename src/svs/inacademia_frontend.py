@@ -123,14 +123,16 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
     def handle_authn_request(self, context):
         internal_request = super()._handle_authn_request(context)
         
-        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
-                        self.config.get("request_exit_order", 100),
-                        "inacademia_frontend", "request", "entry", "success")
-
         if not isinstance(internal_request, InternalRequest):
             # error message
             return internal_request
         client_info = self.provider.clients[internal_request.requester]
+        req_rp = client_info.get('client_id')
+        
+        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
+                        self.config.get("request_exit_order", 100),
+                        "inacademia_frontend", "request", "entry", "success", '' , req_rp, 'Recieved request from RP')
+        
         # initialise consent state
         context.state[consent.STATE_KEY] = {}
         if 'logo' in client_info:
@@ -150,12 +152,14 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
 
         transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("request_exit_order", 200),
-                        "inacademia_frontend", "request", "exit", "success")
+                        "inacademia_frontend", "request", "exit", "success", '' , req_rp, 'Processed request from RP')
 
         return self.auth_req_callback_func(context, internal_request)
 
     def handle_authn_response(self, context, internal_resp):
         auth_req = self._get_authn_request_from_state(context.state)
+        resp_rp = auth_req.get('client_id')
+
         # User might not give us consent to release affiliation
         if 'affiliation' in internal_resp.attributes:
             affiliation_attribute = self.converter.from_internal('openid', internal_resp.attributes)['affiliation']
@@ -165,7 +169,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
             if matching_affiliation:
                 transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("response_exit_order", 1200),
-                        "inacademia_frontend", "response", "exit", "success")
+                        "inacademia_frontend", "response", "exit", "success", resp_rp , '', 'Responding successful validation to RP')
                 
                 return super().handle_authn_response(context, internal_resp,
                                                      {'auth_time': parser.parse(internal_resp.auth_info.timestamp).timestamp(),
@@ -175,7 +179,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         # If the client sent us a state parameter, we should reflect it back according to the spec
         transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("response_exit_order", 1210),
-                        "inacademia_frontend", "response", "exit", "failed")
+                        "inacademia_frontend", "response", "exit", "failed", resp_rp , '', 'Responding failed validation to RP')
 
         if 'state' in auth_req:
             auth_error = AuthorizationErrorResponse(error='access_denied', state=auth_req['state'])
