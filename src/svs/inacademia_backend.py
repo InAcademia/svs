@@ -54,6 +54,7 @@ class InAcademiaBackend(SAMLBackend):
 
             raise SATOSAProcessingHaltError({}, message="State lost", redirect_uri=self.error_uri)
 
+        logger.debug("MD Store: {}".format(self.sp.metadata))
         context.internal_data[self.KEY_BACKEND_METADATA_STORE]=self.sp.metadata
 
         return super().authn_response(context, binding)
