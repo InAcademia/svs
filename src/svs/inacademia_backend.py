@@ -40,7 +40,7 @@ class InAcademiaBackend(SAMLBackend):
 
     def authn_request(self, context, entity_id):
         result = super().authn_request(context, entity_id)
-        
+
         transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("request_exit_order", 400),
                         "inacademia_backend", "request", "exit", "success")
@@ -55,6 +55,7 @@ class InAcademiaBackend(SAMLBackend):
         if not self.name in context.state:
             raise SATOSAProcessingHaltError({}, message="State lost", redirect_uri=self.error_uri)
 
+        logger.debug("MD Store: {}".format(self.sp.metadata))
         context.internal_data[self.KEY_BACKEND_METADATA_STORE]=self.sp.metadata
 
         transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),

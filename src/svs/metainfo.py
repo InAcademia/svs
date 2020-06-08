@@ -55,6 +55,7 @@ class MetaInfo(ResponseMicroService):
         issuer = internal_response.auth_info.issuer
         logger.info("Issuer: %s" % issuer)
         metadata_store = context.internal_data.get('metadata_store')
+        logger.debug("MD Store: {}".format(metadata_store))
         #logger.info("md[issuer] {}".format(metadata_store[issuer]))
         if metadata_store:
             name = self._get_name(metadata_store, issuer, "en")
