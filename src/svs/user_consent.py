@@ -86,7 +86,7 @@ class UserConsent(ResponseMicroService):
                         self.config.get("process_entry_order", 700),
                         "user_consent", "process", "entry", "success")
 
-        consent_state = context.state[STATE_KEY]
+        consent_state = _get_consent_state(context)
 
         internal_response.attributes = {k: v for k, v in internal_response.attributes.items() if
                                         k in consent_state['filter']}
@@ -108,7 +108,7 @@ class UserConsent(ResponseMicroService):
         :param context: response context
         :return: response
         """
-        consent_state = context.state[STATE_KEY]
+        consent_state = _get_consent_state(context)
         saved_resp = consent_state['internal_response']
         internal_response = InternalResponse.from_dict(saved_resp)
         del context.state[STATE_KEY]
@@ -130,7 +130,7 @@ class UserConsent(ResponseMicroService):
                         "user_consent", "accept", "exit", "success")
 
         return super().process(context, internal_response)
-
+    
     def deny_consent(self, context):
         """
         Endpoint for handling denied consent.
@@ -148,7 +148,7 @@ class UserConsent(ResponseMicroService):
         raise SATOSAAuthenticationError(context.state, 'Consent was denied by the user.')
 
     def change_language(self, context):
-        consent_state = context.state[STATE_KEY]
+        consent_state = _get_consent_state(context)
         saved_resp = consent_state['internal_response']
         internal_response = InternalResponse.from_dict(saved_resp)
 
@@ -173,3 +173,8 @@ class UserConsent(ResponseMicroService):
             return normalized_path
         else:
             return None
+
+    def _get_consent_state(self, context):
+        consent_state = context.state.get(STATE_KEY, None)
+        if consent_state is None:
+            raise SATOSAAuthenticationError(context.state, 'Session timed out.')
