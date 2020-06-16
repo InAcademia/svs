@@ -1,6 +1,7 @@
 import hashlib
 import random
 import logging
+import json
 
 from time import mktime, gmtime
 from urllib.parse import parse_qs
@@ -48,26 +49,14 @@ class InAcademiaBackend(SAMLBackend):
         return result
 
     def authn_response(self, context, binding):
-        
-        resp_idp_entityid = list(self.sp.metadata.with_descriptor("idpsso").keys())[0]
-        
-        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
-                        self.config.get("response_entry_order", 500),
-                        "inacademia_backend", "response", "entry", "success", '', resp_idp_entityid, 'Recieved response from IdP')
-
         if not self.name in context.state:
             transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("response_entry_order", 510),
-                        "inacademia_backend", "response", "entry", "failed", '', resp_idp_entityid, 'Recieved response from IdP, but state lost', 'internal')
+                        "inacademia_backend", "response", "entry", "failed", '', '', 'Recieved response from IdP, but state lost', 'internal')
             
             raise SATOSAProcessingHaltError({}, message="State lost", redirect_uri=self.error_uri)
 
         context.internal_data[self.KEY_BACKEND_METADATA_STORE]=self.sp.metadata
-        
-        # ToDo: does this add any value?
-        #transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
-        #                self.config.get("response_exit_order", 600),
-        #                "inacademia_backend", "response", "exit", "success", '', '', '')
 
         return super().authn_response(context, binding)
 
@@ -76,7 +65,7 @@ class InAcademiaBackend(SAMLBackend):
         # auth_response object will also be modified
         # import pdb; pdb.set_trace()
         internal_resp = super()._translate_response(auth_response, state)
-        resp_idp_entityid = list(self.sp.metadata.with_descriptor("idpsso").keys())[0]
+        resp_idp_entityid = internal_resp.to_dict().get('auth_info').get('issuer')
 
         if not any(affiliation_attr in auth_response.ava for affiliation_attr in self.config['affiliation_attributes']):
             
@@ -100,6 +89,11 @@ class InAcademiaBackend(SAMLBackend):
             
             raise SATOSAAuthenticationError(state, 'Failed to construct persistent user id from IdP response.')
 
+        # Happy Flow
+        transaction_log(state.state_dict.get("SESSION_ID", "n/a"),
+                        self.config.get("response_entry_order", 500),
+                        "inacademia_backend", "response", "entry", "success", '', resp_idp_entityid, 'Recieved response from IdP')        
+        
         return internal_resp
 
     def _generate_random_user_id(self, length=12, allowed_chars='abcdefghijklmnopqrstuvwxyz'
