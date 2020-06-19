@@ -69,4 +69,6 @@ class MetaInfo(ResponseMicroService):
         logger.info("RegAuth: %s" % ra)
         logger.info("Country: %s" % country)
 
+        context.state['metadata'] = { 'ra': ra, 'name': name, 'country': country }
+
         return super().process(context, internal_response)
