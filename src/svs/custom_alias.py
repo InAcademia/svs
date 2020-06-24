@@ -40,7 +40,7 @@ class CustomAlias(RequestMicroService):
             mimetype = mimetypes.guess_type(alias)[0]
             logger.debug("mimetype {}".format(mimetype))
         except Exception as e:
-            response = "Not found {}".format(e)
+            response = "File not found /{}".format(path)
             mimetype = "text/html"
 
         if 'substitutions' in context.state:
