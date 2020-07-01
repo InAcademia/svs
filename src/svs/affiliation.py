@@ -41,7 +41,6 @@ def _first_matching_value(accepted_values, bag):
     return None
 
 AFFILIATIONS = {
-    'affiliated': _is_affiliated,
     'student': _is_student,
     'employee': _is_employee,
     'faculty+staff': _is_faculty_or_staff,
