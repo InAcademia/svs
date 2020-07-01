@@ -74,12 +74,14 @@ def claims_request_is_valid_for_client(provider, authentication_request):
 
 class InAcademiaFrontend(OpenIDConnectFrontend):
     def __init__(self, auth_req_callback_func, internal_attributes, config, base_url, name):
-        config['provider'] = {'response_types_supported': ['id_token'], 'scopes_supported': ['openid'] + SCOPE_VALUES}
+        config['provider']['response_types_supported'] = ['id_token']
+        config['provider']['scopes_supported'] = ['openid'] + SCOPE_VALUES
         super().__init__(auth_req_callback_func, internal_attributes, config, base_url, name)
         self.entity_id_map = self._read_entity_id_map()
 
     def _create_provider(self, endpoint_baseurl):
         super()._create_provider(endpoint_baseurl)
+        self.provider.configuration_information["grant_types_supported"] = ['implicit']
         self.provider.authentication_request_validators.append(
                 functools.partial(scope_is_valid_for_client, self.provider))
         self.provider.authentication_request_validators.append(
@@ -122,17 +124,17 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
 
     def handle_authn_request(self, context):
         internal_request = super()._handle_authn_request(context)
-        
+
         if not isinstance(internal_request, InternalRequest):
             # error message
             return internal_request
         client_info = self.provider.clients[internal_request.requester]
         req_rp = client_info.get('client_id')
-        
+
         transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("request_exit_order", 100),
                         "inacademia_frontend", "request", "entry", "success", '' , req_rp, 'Recieved request from RP')
-        
+
         # initialise consent state
         context.state[consent.STATE_KEY] = {}
         if 'logo' in client_info:
@@ -170,11 +172,11 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
                 transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
                         self.config.get("response_exit_order", 1200),
                         "inacademia_frontend", "response", "exit", "success", resp_rp , '', 'Responding successful validation to RP')
-                
+
                 return super().handle_authn_response(context, internal_resp,
                                                      {'auth_time': parser.parse(internal_resp.auth_info.timestamp).timestamp(),
                                                       'requested_scopes': {'values': scope}})
-        
+
         # User's affiliation was not released or was not the one requested so return an error
         # If the client sent us a state parameter, we should reflect it back according to the spec
         transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
@@ -188,7 +190,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         del context.state[self.name]
         http_response = auth_error.request(auth_req['redirect_uri'], should_fragment_encode(auth_req))
 
-        
+
         return SeeOther(http_response)
 
     def register_endpoints(self, backend_names):
