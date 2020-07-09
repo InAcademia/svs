@@ -15,7 +15,7 @@ class AttributeOverride(ResponseMicroService):
 
     def __init__(self, config, internal_attributes, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.overrides = config.get('overrides', [])
+        self.overrides = config.get('overrides', {})
         logger.info("AttributeOverride micro_service is active")
 
     def process(self, context, internal_response):
@@ -23,10 +23,21 @@ class AttributeOverride(ResponseMicroService):
         try:
             ra = context.state['metadata']['ra']
             overrides = self.overrides[ra]
-            logger.debug("AttributeOverride ra: {}".format(ra))
-            logger.debug("AttributeOverride overrides: {}".format(overrides))
-            for src, dst in overrides.items():
-                internal_response.attributes[dst] = internal_response.attributes[src]
+            logger.debug(f"ra: {ra}")
+            for src, values in overrides.items():
+                logger.debug(f" src attribute: {src}")
+                for value, destination in values.items():
+                    dst_a = destination[0]
+                    dst_v = destination[1]
+                    logger.debug(f"   value: {value}")
+                    logger.debug(f"     will replace dst attribute: {dst_a}")
+                    logger.debug(f"       with value: {dst_v}")
+                    # First, clear all the dst attribute values
+                    internal_response.attributes[dst_a] = [ v for v in internal_response.attributes[dst_a] if v != dst_v ]
+                    # Add the override value if the source contains the condition value
+                    if value in internal_response.attributes[src]:
+                        internal_response.attributes[dst_a].append(dst_v)
+
         except Exception as e:
             logger.debug("AttributeOverride {}".format(e))
 
