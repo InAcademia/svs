@@ -82,8 +82,7 @@ class UserConsent(ResponseMicroService):
         :param context: request context
         :param internal_response: the internal response
         """
-        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
-                        self.config.get("process_entry_order", 700),
+        transaction_log(context.state, self.config.get("process_entry_order", 700),
                         "user_consent", "process", "entry", "success", '' , '', 'Requesting consent')
 
         consent_state = context.state[STATE_KEY]
@@ -121,8 +120,7 @@ class UserConsent(ResponseMicroService):
         print(json.dumps(log), file=self.loghandle, end="\n")
         self.loghandle.flush()
 
-        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
-                        self.config.get("consent_exit_order", 1000),
+        transaction_log(context.state, self.config.get("consent_exit_order", 1000),
                         "user_consent", "accept", "exit", "success", '' , '', 'Consent given by the user')
 
         return super().process(context, internal_response)
@@ -137,8 +135,7 @@ class UserConsent(ResponseMicroService):
         :return: response
         """
         del context.state[STATE_KEY]
-        transaction_log(context.state.state_dict.get("SESSION_ID", "n/a"),
-                        self.config.get("consent_exit_order", 1010),
+        transaction_log(context.state, self.config.get("consent_exit_order", 1010),
                         "user_consent", "deny", "exit", "cancel", '' , '', 'Consent was denied by the user', 'user')
 
         raise SATOSAAuthenticationError(context.state, 'Consent was denied by the user.')
