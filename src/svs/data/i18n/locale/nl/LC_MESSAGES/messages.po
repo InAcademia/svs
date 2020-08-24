@@ -3,9 +3,9 @@ msgstr ""
 "Project-Id-Version: InAcademia 0.1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2017-08-29 23:05+0300\n"
-"PO-Revision-Date: 2018-09-12 16:50+0100\n"
-"Last-Translator: Niels van Dijk <niels.vandijk@surfnet.nl>\n"
-"Language: nl\n"
+"PO-Revision-Date: 2018-09-10 23:36+0100\n"
+"Last-Translator: Rebecka Gulliksson <rebecka.gulliksson@umu.se>\n"
+"Language: en\n"
 "Language-Team: InAcademia <tech@inacademia.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
@@ -14,80 +14,29 @@ msgstr ""
 "Generated-By: Babel 2.5.0\n"
 "X-Generator: Poedit 2.1.1\n"
 
-#: src/svs/user_consent.py:42
-msgid "Affiliation"
-msgstr "Aansluiting"
-
-#: src/svs/user_consent.py:45
-msgid "Domain"
-msgstr "Domein"
-
-#: src/svs/templates/consent.mako:23
 msgid "Consent"
 msgstr "Toestemming"
 
-#: src/svs/templates/consent.mako:277
 msgid "Your consent is required to continue."
-msgstr "Uw toestemming is vereist om door te gaan."
+msgstr "Uw Toestemming is vereist"
 
-#: src/svs/templates/consent.mako:288
-msgid "To allow you to prove your affiliation, "
-msgstr "Om u in staat te stellen uw band te bewijzen,"
-
-#: src/svs/templates/consent.mako:288
-msgid "makes use of the InAcademia service."
-msgstr "maakt gebruik van de InAcademia-service."
-
-#: src/svs/templates/consent.mako:289
-msgid ""
-"Your institution has confirmed your affiliation to Inacademia. We now ask "
-"you to consent to confirming your affiliation to "
+msgid "consent_body"
 msgstr ""
-"Uw instelling heeft uw aansluiting bij Inacademia bevestigd. We vragen u nu "
-"om in te stemmen met het bevestigen van uw aansluiting bij"
+    "U ziet deze pagina omdat ${requester_name} InAcademia gebruikt om aan te "
+    "tonen dat u bij een academische instelling hoort "
+    "(Short test version) "
 
-#: src/svs/templates/consent.mako:289
-msgid ""
-"In addition, InAcademia may reveal the country and name of your institution. "
-"InAcademia will not store any of the data we have received from your "
-"institution, nor will we store your consent."
+msgid "more_information"
 msgstr ""
-"Bovendien kan InAcademia het land en de naam van uw instelling bekendmaken. "
-"InAcademia zal geen van de gegevens opslaan die we van uw instelling hebben "
-"ontvangen, noch zullen wij uw toestemming opslaan."
+    "Voor meer informatie over de informatie die we met ${requester_name} delen "
+    "klikt u op \"Details\" hieronder.<br><br>"
+    "Meer informatie: <a href=\"https://inacademia.org/privacy-statement/\">Privacy Verklaring</a>"
 
-#: src/svs/templates/consent.mako:291
-msgid "For more details on the information we will provide to"
-msgstr "Voor meer informatie over de informatie die we verstrekken aan"
-
-#: src/svs/templates/consent.mako:290
-msgid ""
-"In order to exercise your data subject rights, please save this screen (e.g. "
-"make a print screen). It shall be provided with your request."
-msgstr ""
-"Als u uw rechten wilt uitoefenen, slaat u dit scherm op (bijvoorbeeld een "
-"afdrukscherm maken). Het zal worden verstrekt bij uw verzoek."
-
-#: src/svs/templates/consent.mako:300
-msgid "More information: "
-msgstr "Meer informatie: "
-
-#: src/svs/templates/consent.mako:300
-msgid "Privacy Statement"
-msgstr "Privacyverklaring"
-
-#: src/svs/templates/consent.mako:297
-msgid "please select \"Details\" below."
-msgstr "Selecteer hieronder \"Details\"."
-
-#: src/svs/templates/consent.mako:310
 msgid "Details"
-msgstr "Details"
+msgstr ""
 
-#: src/svs/templates/consent.mako:328
 msgid "OK, accept"
-msgstr "Ok, accepteren"
+msgstr "OK, accepteren"
 
-#: src/svs/templates/consent.mako:330
 msgid "No, cancel"
-msgstr "Nee, stoppen"
+msgstr "Nee, afbreken"

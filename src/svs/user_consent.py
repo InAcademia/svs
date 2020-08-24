@@ -4,6 +4,7 @@ from urllib.parse import urlparse
 
 import pkg_resources
 from mako.lookup import TemplateLookup
+from mako.template import Template
 from satosa.exception import SATOSAAuthenticationError
 from satosa.internal_data import InternalResponse
 from satosa.micro_services.base import ResponseMicroService
@@ -68,6 +69,11 @@ class UserConsent(ResponseMicroService):
         released_attributes = self._attributes_to_release(internal_response)
         template = self.template_lookup.get_template('consent.mako')
         page = template.render(requester_name=requester_name,
+                               requester_logo=self._normalize_logo(requester_logo),
+                               released_claims=released_attributes,
+                               form_action='/consent{}'.format(self.endpoint),
+                               language=language)
+        page = Template(page).render(requester_name=requester_name,
                                requester_logo=self._normalize_logo(requester_logo),
                                released_claims=released_attributes,
                                form_action='/consent{}'.format(self.endpoint),
