@@ -78,6 +78,13 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         super().__init__(auth_req_callback_func, internal_attributes, config, base_url, name)
         self.entity_id_map = self._read_entity_id_map()
 
+    def handle_backend_error(self, error):
+        auth_req = self._get_authn_request_from_state(error.state)
+        resp_rp = auth_req.get('client_id')
+        transaction_log(error.state, self.config.get("request_exit_order", 10),
+                        "inacademia_frontend", "response", "exit", "failed", resp_rp, '', 'Handle backend error', error.message)
+        return super().handle_backend_error(error)
+
     def _create_provider(self, endpoint_baseurl):
         super()._create_provider(endpoint_baseurl)
         self.provider.authentication_request_validators.append(
