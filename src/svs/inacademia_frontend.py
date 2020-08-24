@@ -182,7 +182,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
 
         transaction_log(context.state, self.config.get("request_exit_order", 100),
                         "inacademia_frontend", "request", "entry", "success", '', req_rp, 'Recieved request from RP')
-
+        
         # initialise consent state
         context.state[consent.STATE_KEY] = {}
         if 'logo' in client_info:
