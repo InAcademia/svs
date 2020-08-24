@@ -33,6 +33,7 @@ class CustomAlias(RequestMicroService):
         path = context._path
         endpoint = path.split("/")[0]
         target = path[len(endpoint) + 1:]
+        status = "200 OK"
         try:
             alias = "%s/%s" % (self.locations[endpoint], target)
             logger.info("{} _handle: {} - {} - {}".format(self.logprefix, endpoint, target, alias))
@@ -40,12 +41,13 @@ class CustomAlias(RequestMicroService):
             mimetype = mimetypes.guess_type(alias)[0]
             logger.debug("mimetype {}".format(mimetype))
         except Exception as e:
-            response = "Not found {}".format(e)
+            response = "File not found /{}".format(path)
             mimetype = "text/html"
+            status = "404 Not Found"
 
         if 'substitutions' in context.state:
             for search, replace in context.state['substitutions'].items():
                 logger.info("search: {}, replace: {}".format(search, replace))
                 response = response.replace(search, replace)
 
-        return Response(response, content=mimetype)
+        return Response(response, content=mimetype, status=status)
