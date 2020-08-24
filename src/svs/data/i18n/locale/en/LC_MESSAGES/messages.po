@@ -1,3 +1,8 @@
+# Please make sure to compile your translated .po file using msgfmt
+# before commiting the translation like this:
+#
+# msgfmt messages.po -o messages.mo
+
 msgid ""
 msgstr ""
 "Project-Id-Version: InAcademia 0.1.0\n"
@@ -41,7 +46,7 @@ msgid "more_information"
 msgstr ""
     "For more details on the information we will provide to ${requester_name} please select "
     "\"Details\" below.<br><br>"
-    "More information: <a href=\"https://inacademia.org/privacy-statement/\">Privacy Statement</a>"
+    "More information: <a href=\"${privacy_url}\">Privacy Statement</a>"
 
 msgid "Details"
 msgstr ""

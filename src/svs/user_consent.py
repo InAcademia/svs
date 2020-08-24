@@ -35,6 +35,7 @@ class UserConsent(ResponseMicroService):
         super().__init__(*args, **kwargs)
         self.config = config
         self.logo_base_path = config['logo_base_path']
+        self.privacy_url = config.get('privacy_url', "https://inacademia.org/privacy-and-data-protection/")
         self.attributes = config.get('attributes', {})
         self.endpoint = '/handle_consent'
         self.template_lookup = TemplateLookup(directories=[pkg_resources.resource_filename('svs', 'templates/')])
@@ -70,11 +71,13 @@ class UserConsent(ResponseMicroService):
         template = self.template_lookup.get_template('consent.mako')
         page = template.render(requester_name=requester_name,
                                requester_logo=self._normalize_logo(requester_logo),
+                               privacy_url=self.privacy_url,
                                released_claims=released_attributes,
                                form_action='/consent{}'.format(self.endpoint),
                                language=language)
         page = Template(page).render(requester_name=requester_name,
                                requester_logo=self._normalize_logo(requester_logo),
+                               privacy_url=self.privacy_url,
                                released_claims=released_attributes,
                                form_action='/consent{}'.format(self.endpoint),
                                language=language)

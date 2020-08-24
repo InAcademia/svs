@@ -1,3 +1,8 @@
+# Please make sure to compile your translated .po file using msgfmt
+# before commiting the translation like this:
+#
+# msgfmt messages.po -o messages.mo
+
 msgid ""
 msgstr ""
 "Project-Id-Version: InAcademia 0.1.0\n"
@@ -23,14 +28,26 @@ msgstr "Uw Toestemming is vereist"
 msgid "consent_body"
 msgstr ""
     "U ziet deze pagina omdat ${requester_name} InAcademia gebruikt om aan te "
-    "tonen dat u bij een academische instelling hoort "
-    "(Short test version) "
+    "tonen dat u bij een academische instelling hoort. Door in te loggen op het "
+    "vorige scherm heeft de instelling uw relatie met deze instelling bevestigd. "
+    "Om het proces af te ronden verzoeken wij u om InAcademia toestemming te geven "
+    "deze relatie aan ${requester_name} te bevestigen. Bovendien kan InAcademia ook "
+    "de naam en het land waarin deze instelling zich bevindt doorgeven. We geven "
+    "echter geen enkele persoonljk identificeerbare eigenschap zoals bijvoorbeeld "
+    " uw naam, door en slaan deze ook niet op. Ook de toestemming waar nu om gevraagd "
+    "wordt, slaan we niet op. Voor meer informatie over de gegevens die we doorsturen "
+    "om uw relatie te bevestigen kunt u op \"Details\" hieronder klikken. Als u geen "
+    "toestemming wilt geven om uw relatie met uw instelling aan ${requester_name} "
+    "door te geven kiest u hieronder voor \"Nee, afbreken\", waarmee u terug gestuurd "
+    "wordt naar de website van ${requester_name} zonder deze gegegens door te geven "
+    "en waarna u een andere manier kunt kiezen om uw relatie met de instelling van uw "
+    "keuze aan te tonen."
 
 msgid "more_information"
 msgstr ""
     "Voor meer informatie over de informatie die we met ${requester_name} delen "
     "klikt u op \"Details\" hieronder.<br><br>"
-    "Meer informatie: <a href=\"https://inacademia.org/privacy-statement/\">Privacy Verklaring</a>"
+    "Meer informatie: <a href=\"${privacy_url}\">Privacy Verklaring</a>"
 
 msgid "Details"
 msgstr ""
