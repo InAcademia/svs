@@ -84,6 +84,7 @@ def claims_request_is_valid_for_client(provider, authentication_request):
 
 class InAcademiaFrontend(OpenIDConnectFrontend):
     def __init__(self, auth_req_callback_func, internal_attributes, config, base_url, name):
+        config['provider']['scopes_supported'] = ['openid'] + SCOPE_VALUES
         super().__init__(auth_req_callback_func, internal_attributes, config, base_url, name)
         self.entity_id_map = self._read_entity_id_map()
         AuthorizationState.encryption_key = config["encryption_key"]
