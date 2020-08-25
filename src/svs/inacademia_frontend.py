@@ -81,7 +81,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
     def handle_backend_error(self, error):
         auth_req = self._get_authn_request_from_state(error.state)
         resp_rp = auth_req.get('client_id')
-        transaction_log(error.state, self.config.get("request_exit_order", 10),
+        transaction_log(error.state, self.config.get("response_exit_order", 600),
                         "inacademia_frontend", "response", "exit", "failed", resp_rp, '', 'Handle backend error', error.message)
         return super().handle_backend_error(error)
 
