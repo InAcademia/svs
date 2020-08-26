@@ -127,7 +127,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
                 cdb = json.loads(f.read())
         else:
             cdb = {}
-        self.user_db = MongoWrapper(db_uri, "satosa", "authz_codes") if db_uri else {}
+        self.user_db = {}
         self.provider = Provider(self.signing_key, capabilities, authz_state, cdb, Userinfo(self.user_db))
         self.provider.authentication_request_validators.append(
                 functools.partial(scope_is_valid_for_client, self.provider))
