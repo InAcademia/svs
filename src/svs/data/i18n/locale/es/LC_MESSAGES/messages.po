@@ -1,0 +1,58 @@
+# Please make sure to compile your translated .po file using msgfmt
+# before commiting the translation like this:
+#
+# msgfmt messages.po -o messages.mo
+
+msgid ""
+msgstr ""
+"Project-Id-Version: InAcademia 0.1.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2017-08-29 23:05+0300\n"
+"PO-Revision-Date: 2018-09-10 23:36+0100\n"
+"Last-Translator: Rebecka Gulliksson <rebecka.gulliksson@umu.se>\n"
+"Language: en\n"
+"Language-Team: InAcademia <tech@inacademia.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.0\n"
+"X-Generator: Poedit 2.1.1\n"
+
+msgid "Consent"
+msgstr ""
+
+msgid "Your consent is required to continue."
+msgstr ""
+
+msgid "consent_body"
+msgstr ""
+    "You’re seeing this message because ${requester_name} uses InAcademia to prove "
+    "that you are affiliated to an academic institution. By entering your institutional "
+    "credentials on the previous screen your institution has confirmed your affiliation "
+    "to its institution. To complete the process, we’re asking you to consent to the "
+    "InAcademia service confirming to ${requester_name} that you’re affiliated to your "
+    "institution. In addition, InAcademia may reveal the name of your institution and "
+    "the country in which that institution resides, however, we don’t request, store or "
+    "share your name or other directly identifiable personal details, we do not store any "
+    "of the details we have received from your Institution, nor will we store your consent. "
+    "For more details on the information we will use to confirm your affiliation, please "
+    "select \"Details\" below. If you do not wish to consent to the release of your affiliation "
+    "to ${requester_name}, please select \"No, cancel\" in which case you will be returned to "
+    "the ${requester_name} website without release of any data and may have to use alternative "
+    "methods to prove your affiliation."
+
+msgid "more_information"
+msgstr ""
+    "For more details on the information we will provide to ${requester_name} please select "
+    "\"Details\" below.<br><br>"
+    "More information: <a href=\"${privacy_url}\">Privacy Statement</a>"
+
+msgid "Details"
+msgstr ""
+
+msgid "OK, accept"
+msgstr ""
+
+msgid "No, cancel"
+msgstr ""

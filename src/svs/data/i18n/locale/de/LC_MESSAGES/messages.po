@@ -1,3 +1,8 @@
+# Please make sure to compile your translated .po file using msgfmt
+# before commiting the translation like this:
+#
+# msgfmt messages.po -o messages.mo
+
 msgid ""
 msgstr ""
 "Project-Id-Version: svs 0.1.0\n"
@@ -21,7 +26,7 @@ msgid "Your consent is required to continue."
 msgstr "Ihre Einwilligung ist erforderlich, um fortzufahren."
 
 msgid "consent_body"
-msgstr ""    
+msgstr ""
     "Sie sehen diese Nachricht, da ${requester_name} den InAcademia Dienst benutzt, "
     "um zu prüfen, dass Sie einer akademischen Institution angehören. Nachdem Sie "
     "ihre institutionelle Anmeldeinformationen auf dem vorherigen Bildschirm "
