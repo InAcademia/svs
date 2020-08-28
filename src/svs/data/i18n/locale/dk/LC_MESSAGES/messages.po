@@ -45,7 +45,7 @@ msgstr ""
 
 msgid "more_information"
 msgstr ""
-    "For flere detaljer om de oplysninger vi vidergiver til ${requester_name} vælg "
+    "For flere detaljer om de oplysninger vi videregiver til ${requester_name} vælg "
     "\"Detaljer\" nedenunder.<br><br>"
     "Flere oplysninger: <a href=\"${privacy_url}\"> fortrolighedserklæring</a>"
 
