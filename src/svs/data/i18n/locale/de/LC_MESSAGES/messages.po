@@ -1,3 +1,8 @@
+# Please make sure to compile your translated .po file using msgfmt
+# before commiting the translation like this:
+#
+# msgfmt messages.po -o messages.mo
+
 msgid ""
 msgstr ""
 "Project-Id-Version: svs 0.1.0\n"
@@ -14,95 +19,43 @@ msgstr ""
 "Generated-By: Babel 2.5.0\n"
 "X-Generator: Poedit 2.1.1\n"
 
-#: src/svs/user_consent.py:42
-msgid "Affiliation"
-msgstr "Zugehörigkeit"
-
-#: src/svs/user_consent.py:45
-msgid "Domain"
-msgstr "Domain"
-
-#: src/svs/templates/consent.mako:23
 msgid "Consent"
 msgstr "Zustimmung"
 
-#: src/svs/templates/consent.mako:277
 msgid "Your consent is required to continue."
 msgstr "Ihre Einwilligung ist erforderlich, um fortzufahren."
 
-#: src/svs/templates/consent.mako:288
-msgid "To allow you to prove your affiliation, "
-msgstr "Damit Sie Ihre Zugehörigkeit nachweisen können,"
-
-#: src/svs/templates/consent.mako:288
-msgid "makes use of the InAcademia service."
-msgstr "nutzt den inacademia-Service."
-
-#: src/svs/templates/consent.mako:289
-msgid ""
-"Your institution has confirmed your affiliation to Inacademia. We now ask you "
-"to consent to confirming your affiliation to "
+msgid "consent_body"
 msgstr ""
-"Ihre Institution hat ihre Zugehörigkeit zu inacademia bestätigt. Wir bitten "
-"Sie nun, der Bestätigung ihrer Zugehörigkeit zu "
+    "Sie sehen diese Nachricht, da ${requester_name} den InAcademia Dienst benutzt, "
+    "um zu prüfen, dass Sie einer akademischen Institution angehören. Nachdem Sie "
+    "ihre institutionelle Anmeldeinformationen auf dem vorherigen Bildschirm "
+    "eingegeben haben, hat ihre Institution ihre Zugehörigkeit bestätigt. Wir bitten "
+    "Sie nun um ihre Zustimmung, dass der InAcademia Dienst die Zugehörigkeitbestätigung "
+    "an ${requester_name} weitergeben darf. InAcademia kann darüber hinaus, den Namen "
+    "Ihrer Institution und das Land, in dem diese Institution ansässig ist, weitergeben. "
+    "Ihr eigener Name oder jegliche andere direkt identifizierbare personenbezogenen "
+    "Daten werden von InAcademia nicht angefordert, gespeichert oder weitergegeben. "
+    "InAcademia speichert weder die Daten, die wir von Ihrer Institution erhalten haben, "
+    "noch Ihre Zustimmung. Möchten Sie Näheres erfahren, wie InAcademia ihre "
+    "institutionelle Zugehörigkeit bestätigt, wählen Sie unten bitte \"Details\". Möchten "
+    "Sie der Freigabe ihrer Informationen an ${requester_name} nicht zustimmen, wählen Sie "
+    "bitte \"Nein, Abbrechen\". In diesem Fall werden keinerlei Daten frei- oder weitergegeben "
+    "und sie werden zur Website von ${requester_name} zurückgeleitet. Sie müssen dann "
+    "möglicherweise eine andere Methode verwenden, um ihre institutionelle Zugehörigkeit zu "
+    "beweisen."
 
-#: src/svs/templates/consent.mako:289
-msgid ""
-"In addition, InAcademia may reveal the country and name of your institution. "
-"InAcademia will not store any of the data we have received from your "
-"institution, nor will we store your consent."
+msgid "more_information"
 msgstr ""
-"Darüber hinaus kann inacademia das Land und den Namen Ihrer Institution "
-"aufdecken. Inacademia speichert keine der Daten, die wir von Ihrer "
-"Institution erhalten haben, und wir werden Ihre Einwilligung auch nicht "
-"speichern."
+    "Für mehr Details zu den Informationen, die wir an ${requester_name} übermitteln werden, "
+    "klicken Sie bitte auf \"Details\" unten.<br><br>"
+    "Mehr Informationen: <a href=\"${privacy_url}\">Datenschutzerklärung</a>"
 
-#: src/svs/templates/consent.mako:291
-msgid "For more details on the information we will provide to"
-msgstr ""
-"Weitere Details zu den Informationen, die wir Ihnen zur Verfügung stellen "
-"werden"
-
-#: src/svs/templates/consent.mako:290
-msgid ""
-"In order to exercise your data subject rights, please save this screen (e.g. "
-"make a print screen). It shall be provided with your request."
-msgstr ""
-"Um Ihre Datenrechte auszuüben, speichern Sie bitte diesen Bildschirm (z.b. "
-"einen druckbildschirm erstellen), – er mit Ihrer Anfrage versehen ist."
-
-#: src/svs/templates/consent.mako:300
-msgid "More information: "
-msgstr "Mehr Informationen:"
-
-#: src/svs/templates/consent.mako:300
-msgid "Privacy Statement"
-msgstr "Datenschutzerklärung"
-
-#: src/svs/templates/consent.mako:297
-msgid "please select \"Details\" below."
-msgstr "Bitte wählen Sie unten \"Details\" aus."
-
-#: src/svs/templates/consent.mako:310
 msgid "Details"
-msgstr "Einzelheiten"
+msgstr ""
 
-#: src/svs/templates/consent.mako:328
 msgid "OK, accept"
-msgstr "OK, akzeptiere"
+msgstr "OK, Akzeptieren"
 
-#: src/svs/templates/consent.mako:330
 msgid "No, cancel"
-msgstr "Nein, abbrechen"
-
-#~ msgid "Identifier"
-#~ msgstr "Eindeutiger Schlüssel"
-
-#~ msgid "Authentication time"
-#~ msgstr "Authentisierungszeit"
-
-#~ msgid "{client_name} requires the information below to be transferred:"
-#~ msgstr "{client_name} benötigt die Übermittlung der folgenden Informationen:"
-
-#~ msgid "Terms of service"
-#~ msgstr "Bedingungen des Dienstes"
+msgstr "Nein, Abbrechen"

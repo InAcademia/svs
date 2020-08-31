@@ -3,6 +3,7 @@ name: Consent
 config:
   logo_base_path: "/var/svs/logos"
   log_target: '/var/svs/consent.log'
+  privacy_url: 'https://inacademia.org/privacy-statement/'
   attributes:
     affiliation: "Affiliation"
     domain: "Domain"

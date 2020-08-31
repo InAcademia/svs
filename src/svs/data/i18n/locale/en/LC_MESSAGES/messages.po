@@ -1,3 +1,8 @@
+# Please make sure to compile your translated .po file using msgfmt
+# before commiting the translation like this:
+#
+# msgfmt messages.po -o messages.mo
+
 msgid ""
 msgstr ""
 "Project-Id-Version: InAcademia 0.1.0\n"
@@ -14,73 +19,40 @@ msgstr ""
 "Generated-By: Babel 2.5.0\n"
 "X-Generator: Poedit 2.1.1\n"
 
-#: src/svs/user_consent.py:42
-msgid "Affiliation"
-msgstr ""
-
-#: src/svs/user_consent.py:45
-msgid "Domain"
-msgstr ""
-
-#: src/svs/templates/consent.mako:23
 msgid "Consent"
 msgstr ""
 
-#: src/svs/templates/consent.mako:277
 msgid "Your consent is required to continue."
 msgstr ""
 
-#: src/svs/templates/consent.mako:288
-msgid "To allow you to prove your affiliation, "
+msgid "consent_body"
 msgstr ""
+    "You’re seeing this message because ${requester_name} uses InAcademia to prove "
+    "that you are affiliated to an academic institution. By entering your institutional "
+    "credentials on the previous screen your institution has confirmed your affiliation "
+    "to its institution. To complete the process, we’re asking you to consent to the "
+    "InAcademia service confirming to ${requester_name} that you’re affiliated to your "
+    "institution. In addition, InAcademia may reveal the name of your institution and "
+    "the country in which that institution resides, however, we don’t request, store or "
+    "share your name or other directly identifiable personal details, we do not store any "
+    "of the details we have received from your Institution, nor will we store your consent. "
+    "For more details on the information we will use to confirm your affiliation, please "
+    "select \"Details\" below. If you do not wish to consent to the release of your affiliation "
+    "to ${requester_name}, please select \"No, cancel\" in which case you will be returned to "
+    "the ${requester_name} website without release of any data and may have to use alternative "
+    "methods to prove your affiliation."
 
-#: src/svs/templates/consent.mako:288
-msgid "makes use of the InAcademia service."
+msgid "more_information"
 msgstr ""
+    "For more details on the information we will provide to ${requester_name} please select "
+    "\"Details\" below.<br><br>"
+    "More information: <a href=\"${privacy_url}\">Privacy Statement</a>"
 
-#: src/svs/templates/consent.mako:289
-msgid ""
-"Your institution has confirmed your affiliation to Inacademia. We now ask "
-"you to consent to confirming your affiliation to "
-msgstr ""
-
-#: src/svs/templates/consent.mako:289
-msgid ""
-"In addition, InAcademia may reveal the country and name of your institution. "
-"InAcademia will not store any of the data we have received from your "
-"institution, nor will we store your consent."
-msgstr ""
-
-#: src/svs/templates/consent.mako:291
-msgid "For more details on the information we will provide to"
-msgstr ""
-
-#: src/svs/templates/consent.mako:290
-msgid ""
-"In order to exercise your data subject rights, please save this screen (e.g. "
-"make a print screen). It shall be provided with your request."
-msgstr ""
-
-#: src/svs/templates/consent.mako:300
-msgid "More information: "
-msgstr ""
-
-#: src/svs/templates/consent.mako:300
-msgid "Privacy Statement"
-msgstr ""
-
-#: src/svs/templates/consent.mako:297
-msgid "please select \"Details\" below."
-msgstr ""
-
-#: src/svs/templates/consent.mako:310
 msgid "Details"
 msgstr ""
 
-#: src/svs/templates/consent.mako:328
 msgid "OK, accept"
 msgstr ""
 
-#: src/svs/templates/consent.mako:330
 msgid "No, cancel"
 msgstr ""

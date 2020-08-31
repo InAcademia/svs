@@ -1,0 +1,58 @@
+# Please make sure to compile your translated .po file using msgfmt
+# before commiting the translation like this:
+#
+# msgfmt messages.po -o messages.mo
+
+msgid ""
+msgstr ""
+"Project-Id-Version: InAcademia 0.1.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2017-08-29 23:05+0300\n"
+"PO-Revision-Date: 2018-09-10 23:36+0100\n"
+"Last-Translator: Rebecka Gulliksson <rebecka.gulliksson@umu.se>\n"
+"Language: en\n"
+"Language-Team: InAcademia <tech@inacademia.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.0\n"
+"X-Generator: Poedit 2.1.1\n"
+
+msgid "Consent"
+msgstr "Consentimiento"
+
+msgid "Your consent is required to continue."
+msgstr "Se requiere su consentimiento para continuar"
+
+msgid "consent_body"
+msgstr ""
+    "Estás viendo este mensaje porque ${requester_name} utiliza InAcademia para verificar "
+    "que estás afiliado a una institución académica. Al ingresar sus credenciales "
+    "institucionales en la pantalla anterior, su institución ha confirmado que usted está "
+    "afiliado a la institución. Para completar el proceso, le invitamos a que dé su "
+    "consentimiento para que el servicio de InAcademia confirme a {requester_name} que "
+    "está afiliado a su institución. Adicionalmente, InAcademia puede revelar el nombre "
+    "de su institución y el país en el que reside esa institución. Sin embargo, no solicitamos, "
+    "no almacenamos ni compartimos su nombre u otros datos personales directamente identificables. "
+    "Asimismo, no almacenamos ninguno de los datos que hemos recibido de su Institución, ni "
+    "almacenaremos su consentimiento. Para obtener más detalles sobre la información que "
+    "emplearemos para confirmar su afiliación, seleccione \"Detalles\". Si no desea dar su "
+    "consentimiento para notificar de su afiliación a ${requester_name}, seleccione \"No, cancelar\", "
+    "en cuyo caso le devolverá al sitio web de ${requester_name} sin difundir ningún dato, y es "
+    "posible que deba usar otros métodos alternativos para demostrar su afiliación."
+
+msgid "more_information"
+msgstr ""
+    "Para obtener más detalles sobre la información que proporcionamos a {requester_name}, "
+    "seleccione \"Detalles\" a continuación.<br><br>"
+    "Más información: <a href=\"${privacy_url}\">Declaración de privacidad</a>"
+
+msgid "Details"
+msgstr "Detalles"
+
+msgid "OK, accept"
+msgstr "Aceptar"
+
+msgid "No, cancel"
+msgstr "No, cancelar"
