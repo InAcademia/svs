@@ -2,15 +2,23 @@
 Micro Service that asserts the requested idp_hint
 """
 import hashlib
-import json
-from urllib.parse import parse_qs
-
 import logging
 
 from satosa.internal_data import InternalResponse
 from satosa.micro_services.base import ResponseMicroService
 
 logger = logging.getLogger('satosa')
+
+def inacademia_hinting_hash(data):
+    """
+    Hash data the same way this is done in the inacademia-hinting code.
+
+    This code should not be changed on its own - if needed, it should be
+    changed in-sync with the inacademia-hinting code.
+    """
+    raw = data.encode("utf-8") if isinstance(data, str) else data
+    hash = hashlib.sha1(raw).hexdigest()
+    return hash
 
 class AssertHint(ResponseMicroService):
     """
@@ -30,8 +38,7 @@ class AssertHint(ResponseMicroService):
             issuer = internal_response.auth_info.issuer
             logger.info("AssertHint issuer: %s" % issuer)
 
-            # This from inacademia-hinting code
-            issuer_hash = hashlib.sha1(issuer.encode('utf-8')).hexdigest()
+            issuer_hash = inacademia_hinting_hash(issuer)
             internal_response.attributes[self.internal_attribute] = [issuer_hash]
 
         return super().process(context, internal_response)
