@@ -2,15 +2,17 @@ module: svs.attribute_override.AttributeOverride
 name: AttributeOverride
 config:
   overrides:
-    'urn:mace:idp.foo.barz':
-      # This will map attribute entitlement values 'urn:oid:foo:student'
-      # to attribute affiliation values 'student'
-      # and values 'urn:oid:foo:employee' on affiliation values employee
+    # For Registration Authority 'idp.foo.barz'
+    'idp.foo.barz':
+      # map attribute 'entitlement' value 'urn:oid:foo:student'
+      # to attribute 'affiliation' value 'student'
+      # and value 'urn:oid:foo:employee' on affiliation value 'employee'
       entitlement:
-        'urn:oid:foo:student': [affiliation, 'student']
-        'urn:oid:foo:employee': [affiliation, 'employee']
+        'urn:oid:foo:student': ['affiliation', 'student']
+        'urn:oid:foo:employee': ['affiliation', 'employee']
+    # For Registration Authority 'some.other.ra'
     'some.other.ra':
-      # This will map attribute entitlement values 'urn:oid:bar:member'
-      # to attribute affiliation values 'student'
+      # map attribute 'entitlement' value 'urn:oid:foo:member'
+      # to attribute 'affiliation' value 'student'
       entitlement:
-        'urn:oid:bar:member': [affiliation, 'student']
+        'urn:oid:foo:member': ['affiliation', 'student']
