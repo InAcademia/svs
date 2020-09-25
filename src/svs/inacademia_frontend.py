@@ -112,6 +112,9 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
             except KeyError:
                 idp_hint_key = None
         if idp_hint_key:
+            # We could suffice with idp_hint = true, but we may want
+            # to act differently on mismatches in the future?
+            context.state['InAcademia']['idp_hint_key'] = idp_hint_key
             entity_id = self.entity_id_map.get(idp_hint_key, None)
             if entity_id:
                 #Base64 encode the URL because SATOSA's saml2 backend expects it so
