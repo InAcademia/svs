@@ -1,6 +1,7 @@
 import functools
 import json
 import logging
+import uuid
 from urllib.parse import parse_qs, urlparse
 from base64 import urlsafe_b64encode
 from oic.oic.message import AuthorizationErrorResponse
@@ -11,6 +12,9 @@ from satosa.frontends.openid_connect import OpenIDConnectFrontend
 from satosa.internal_data import InternalRequest
 from satosa.response import SeeOther
 from satosa.micro_services import consent
+from satosa.base import SATOSABase
+from satosa.exception import SATOSAAuthenticationError
+from satosa.logging_util import satosa_logging
 from svs.affiliation import AFFILIATIONS, get_matching_affiliation
 from dateutil import parser
 from .util.transaction_flow_logging import transaction_log
@@ -18,6 +22,32 @@ from .util.transaction_flow_logging import transaction_log
 logger = logging.getLogger('satosa')
 
 SCOPE_VALUES = list(AFFILIATIONS.keys()) + ['persistent', 'transient']
+
+
+def _run_bound_endpoint(self, context, spec):
+    """
+
+    :type context: satosa.context.Context
+    :type spec: ((satosa.context.Context, Any) -> satosa.response.Response, Any) |
+    (satosa.context.Context) -> satosa.response.Response
+
+    :param context: The request context
+    :param spec: bound endpoint function
+    :return: response
+    """
+    try:
+        return spec(context)
+    except SATOSAAuthenticationError as error:
+        error.error_id = uuid.uuid4().urn
+        msg = "ERROR_ID [{err_id}]\nSTATE:\n{state}".format(err_id=error.error_id,
+                                                            state=json.dumps(
+                                                                error.state.state_dict,
+                                                                indent=4))
+        satosa_logging(logger, logging.INFO, msg, error.state, exc_info=False)
+        return self._handle_satosa_authentication_error(error)
+
+
+SATOSABase._run_bound_endpoint = _run_bound_endpoint
 
 
 def scope_is_valid_for_client(provider, authentication_request):
