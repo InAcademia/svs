@@ -69,7 +69,8 @@ class InAcademiaBackend(SAMLBackend):
         if not any(affiliation_attr in auth_response.ava for affiliation_attr in self.config['affiliation_attributes']):
 
             transaction_log(state, self.config.get("response_exit_order", 610),
-                        "inacademia_backend", "response", "exit", "fail",'',resp_idp_entityid,'No affiliation attribute from IdP', 'idp')
+                            "inacademia_backend", "response", "exit", "fail", '', resp_idp_entityid,
+                            ErrorDescription.NO_AFFILIATION_ATTR[LOG_MSG], 'idp')
 
             auth_error = SATOSAAuthenticationError(state, "")
             auth_error._message = ErrorDescription.NO_AFFILIATION_ATTR[ERROR_DESC]
