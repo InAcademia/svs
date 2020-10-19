@@ -11,6 +11,7 @@ from satosa.micro_services.base import ResponseMicroService
 from satosa.response import Response
 from satosa.logging_util import satosa_logging
 from .util.transaction_flow_logging import transaction_log
+from .error_description import ErrorDescription, ERROR_DESC, LOG_MSG
 
 import logging
 logger = logging.getLogger('satosa')
@@ -145,9 +146,12 @@ class UserConsent(ResponseMicroService):
         """
         del context.state[STATE_KEY]
         transaction_log(context.state, self.config.get("consent_exit_order", 1010),
-                        "user_consent", "deny", "exit", "cancel", '' , '', 'Consent was denied by the user', 'user')
+                        "user_consent", "deny", "exit", "cancel", '', '', ErrorDescription.USER_CONSENT_DENIED[LOG_MSG],
+                        'user')
 
-        raise SATOSAAuthenticationError(context.state, 'Consent was denied by the user.')
+        auth_error = SATOSAAuthenticationError(context.state, '')
+        auth_error._message = ErrorDescription.USER_CONSENT_DENIED[ERROR_DESC]
+        raise auth_error
 
     def change_language(self, context):
         consent_state = context.state[STATE_KEY]
