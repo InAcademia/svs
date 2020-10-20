@@ -14,6 +14,7 @@ from satosa.micro_services import consent
 from svs.affiliation import AFFILIATIONS, get_matching_affiliation
 from dateutil import parser
 from .util.transaction_flow_logging import transaction_log
+from .error_description import ErrorDescription, ERROR_DESC, LOG_MSG
 
 logger = logging.getLogger('satosa')
 
@@ -172,7 +173,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
             affiliation_attribute = self.converter.from_internal('openid', internal_resp.attributes)['affiliation']
             scope = auth_req['scope']
             matching_affiliation = get_matching_affiliation(scope, affiliation_attribute)
-
+            
             if matching_affiliation:
                 transaction_log(context.state, self.config.get("response_exit_order", 1200),
                         "inacademia_frontend", "response", "exit", "success", resp_rp , '', 'Responding successful validation to RP')
@@ -184,12 +185,17 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         # User's affiliation was not released or was not the one requested so return an error
         # If the client sent us a state parameter, we should reflect it back according to the spec
         transaction_log(context.state, self.config.get("response_exit_order", 1210),
-                        "inacademia_frontend", "response", "exit", "failed", resp_rp , '', 'Responding failed validation to RP')
+                        "inacademia_frontend", "response", "exit", "failed", resp_rp, '',
+                        ErrorDescription.REQUESTED_AFFILIATION_MISSING[LOG_MSG])
 
         if 'state' in auth_req:
-            auth_error = AuthorizationErrorResponse(error='access_denied', state=auth_req['state'])
+            auth_error = AuthorizationErrorResponse(error='access_denied', state=auth_req['state'],
+                                                    error_description=ErrorDescription.REQUESTED_AFFILIATION_MISSING[
+                                                        ERROR_DESC])
         else:
-            auth_error = AuthorizationErrorResponse(error='access_denied')
+            auth_error = AuthorizationErrorResponse(error='access_denied',
+                                                    error_description=ErrorDescription.REQUESTED_AFFILIATION_MISSING[
+                                                        ERROR_DESC])
         del context.state[self.name]
         http_response = auth_error.request(auth_req['redirect_uri'], should_fragment_encode(auth_req))
 
