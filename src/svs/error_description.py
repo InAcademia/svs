@@ -19,8 +19,8 @@ class ErrorDescription(dict, Enum):
     NO_AFFILIATION_ATTR = {ERROR_DESC: "no affiliation available for this user",
                            LOG_MSG: "No affiliation attribute from IDP."}
 
-    REQUESTED_AFFILIATION_MISSING = {ERROR_DESC: "no affiliation available for this user",
-                                     LOG_MSG: "Affiliation from IdP does not match requested validation from RP."}
+    REQUESTED_AFFILIATION_MISMATCH = {ERROR_DESC: "no affiliation available for this user",
+                                      LOG_MSG: "Affiliation from IdP does not match requested validation from RP."}
 
     USER_CONSENT_DENIED = {ERROR_DESC: "User Consent Denied",
                            LOG_MSG: "Consent was denied by the user."}
