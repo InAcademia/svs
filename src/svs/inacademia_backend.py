@@ -10,6 +10,7 @@ from saml2.saml import NAMEID_FORMAT_PERSISTENT, NAMEID_FORMAT_TRANSIENT
 from satosa.backends.saml2 import SAMLBackend
 from satosa.exception import SATOSAAuthenticationError, SATOSAProcessingHaltError
 from .util.transaction_flow_logging import transaction_log
+from .error_description import ErrorDescription, ERROR_DESC, LOG_MSG
 
 logger = logging.getLogger('satosa')
 
@@ -68,9 +69,12 @@ class InAcademiaBackend(SAMLBackend):
         if not any(affiliation_attr in auth_response.ava for affiliation_attr in self.config['affiliation_attributes']):
 
             transaction_log(state, self.config.get("response_exit_order", 610),
-                        "inacademia_backend", "response", "exit", "fail",'',resp_idp_entityid,'No affiliation attribute from IdP', 'idp')
+                            "inacademia_backend", "response", "exit", "fail", '', resp_idp_entityid,
+                            ErrorDescription.NO_AFFILIATION_ATTR[LOG_MSG], 'idp')
 
-            raise SATOSAProcessingHaltError(state=state, message="No affiliation attribute from IdP", redirect_uri=self.error_uri)
+            auth_error = SATOSAAuthenticationError(state, "")
+            auth_error._message = ErrorDescription.NO_AFFILIATION_ATTR[ERROR_DESC]
+            raise auth_error
 
         params = parse_qs(state['InAcademia']['oidc_request'])
         if 'persistent' in params['scope'][0].split(" "):
