@@ -8,7 +8,7 @@ from mako.template import Template
 from satosa.exception import SATOSAAuthenticationError
 from satosa.internal_data import InternalResponse
 from satosa.micro_services.base import ResponseMicroService
-from satosa.response import Response
+from satosa.response import Response, Redirect
 from satosa.logging_util import satosa_logging
 from .util.transaction_flow_logging import transaction_log
 from .error_description import ErrorDescription, ERROR_DESC, LOG_MSG
@@ -96,13 +96,11 @@ class UserConsent(ResponseMicroService):
                         "user_consent", "process", "entry", "success", '' , '', 'Requesting consent')
 
         consent_state = context.state[STATE_KEY]
-
         internal_response.attributes = {k: v for k, v in internal_response.attributes.items() if
                                         k in consent_state['filter']}
-
         consent_state['internal_response'] = internal_response.to_dict()
-
-        return self.render_consent(consent_state, internal_response)
+        handler = '/consent{}'.format(self.endpoint)
+        return Redirect(handler)
 
     def accept_consent(self, context):
         """
@@ -153,7 +151,7 @@ class UserConsent(ResponseMicroService):
         auth_error._message = ErrorDescription.USER_CONSENT_DENIED[ERROR_DESC]
         raise auth_error
 
-    def change_language(self, context):
+    def handle_consent(self, context):
         consent_state = context.state[STATE_KEY]
         saved_resp = consent_state['internal_response']
         internal_response = InternalResponse.from_dict(saved_resp)
@@ -164,7 +162,7 @@ class UserConsent(ResponseMicroService):
     def register_endpoints(self):
         base = '^consent{}'.format(self.endpoint)
         url_map = []
-        url_map.append(('{}$'.format(base), self.change_language))
+        url_map.append(('{}$'.format(base), self.handle_consent))
         url_map.append(('{}/allow'.format(base), self.accept_consent))
         url_map.append(('{}/deny'.format(base), self.deny_consent))
         return url_map
