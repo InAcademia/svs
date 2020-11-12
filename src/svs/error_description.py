@@ -24,3 +24,5 @@ class ErrorDescription(dict, Enum):
 
     USER_CONSENT_DENIED = {ERROR_DESC: "User Consent Denied",
                            LOG_MSG: "Consent was denied by the user."}
+
+    AUTHENTICATION_ERROR_FROM_IDP = {ERROR_DESC: "authentication failed", LOG_MSG: None}

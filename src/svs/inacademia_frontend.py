@@ -237,3 +237,8 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
             url_map.append(client_registration)
 
         return url_map
+
+    def handle_backend_error(self, exception):
+        exception._message = ErrorDescription.AUTHENTICATION_ERROR_FROM_IDP[ERROR_DESC]
+        return super().handle_backend_error(exception)
+
