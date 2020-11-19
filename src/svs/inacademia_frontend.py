@@ -241,12 +241,16 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
     def handle_backend_error(self, exception):
         if "Authentication failed" in exception.message:
             exception._message = ErrorDescription.AUTHENTICATION_ERROR_FROM_IDP[ERROR_DESC]
+            resp_rp = "unknown"
 
-        auth_req = self._get_authn_request_from_state(exception.state)
-        resp_rp = auth_req.get('client_id')
+            if exception.state:
+                auth_req = self._get_authn_request_from_state(exception.state)
 
-        transaction_log(exception.state, self.config.get("response_exit_order", 600),
-                        "inacademia_frontend", "response", "exit", "failed", resp_rp, '',
-                        ErrorDescription.AUTHENTICATION_ERROR_FROM_IDP[LOG_MSG])
+                if auth_req and auth_req.get('client_id'):
+                    resp_rp = auth_req.get('client_id')
+
+            transaction_log(exception.state, self.config.get("response_exit_order", 600),
+                            "inacademia_frontend", "response", "exit", "failed", resp_rp, '',
+                            ErrorDescription.AUTHENTICATION_ERROR_FROM_IDP[LOG_MSG])
 
         return super().handle_backend_error(exception)
