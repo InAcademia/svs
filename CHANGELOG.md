@@ -2,6 +2,10 @@
 All notable changes to InAcademia SVS will be documented in this file.
 
 ## [Unreleased]
+## 2020-11-25
+### Added
+- Error handling when a user requests 'persistent' scope but SVS is unable to construct/retrieve persistent user id for that user due to insufficient information from IdP. 
+
 ## 2020-11-18
 ### Changed
 - Fixed the position of transaction logging code 500
