@@ -26,11 +26,12 @@
       <div class="col-xs-2 align-right sp-col-2">
         <form action="${form_action}" method="GET">
           <select name="lang" id="lang" onchange="this.form.submit()">
+              <option value="no">Bokmål</option>
               <option value="dk">Dansk</option>
               <option value="de">Deutsch</option>
               <option value="en">English</option>
               <option value="es">Español</option>
-              <option value="it">Italiano</option>
+          <!--<option value="it">Italiano</option>-->
               <option value="nl">Nederlands</option>
           </select>
         </form>
@@ -79,6 +80,7 @@
                  % endif
                  </span></li>
              % endfor
+             <li class="list-group-item"><span>${_("persistent_identifier")}</span></li>
              </ul>
         </div>
     </div>
