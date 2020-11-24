@@ -1,0 +1,61 @@
+# Please make sure to compile your translated .po file using msgfmt
+# before commiting the translation like this:
+#
+# msgfmt messages.po -o messages.mo
+
+msgid ""
+msgstr ""
+"Project-Id-Version: InAcademia 0.1.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2017-08-29 23:05+0300\n"
+"PO-Revision-Date: 2018-09-10 23:36+0100\n"
+"Last-Translator: Rebecka Gulliksson <rebecka.gulliksson@umu.se>\n"
+"Language: no\n"
+"Language-Team: InAcademia <tech@inacademia.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.0\n"
+"X-Generator: Poedit 2.1.1\n"
+
+msgid "Consent"
+msgstr "Samtykke"
+
+msgid "Your consent is required to continue."
+msgstr "Din samtykke er nødvendig for å fortsette"
+
+msgid "consent_body"
+msgstr ""
+    "Denne meldingen oppstår fordi ${requester_name} bruker InAcademia for å bevise at du "
+    "er tilknyttet til en akademisk institusjon. Da du brukte din påloggingsinformasjon i "
+    "forrige skjema, bekreftet din institusjon din tilknyting. For å ferdigstille prosessen, "
+    "må vi be om ditt samtykke til at InAcademia-tjenesten kan bekrefte din tilknyting videre "
+    "til ${requester_name}.<br>"
+    "I tillegg kan InAcademia også informere om ditt institusjonsnavn og -land, men vi deler "
+    "ikke ditt navn eller noe annen identifiserbar informasjon om deg. Vi logger denne "
+    "transaksjonen med hensyn til feilsøking i 28 dager, og sletter alle personlige data fra "
+    "den efter det.<br>"
+    "For å lese mer om informasjonen vi bruker for å godkjenne din tilknyting, vennligst se "
+    "lenken \"Detaljer\", som du finner nedenfor. Dersom du ikke ønsker å gi ditt samtykke til "
+    "at vi deler denne informasjon med ${requester_name}, vennligst velg \"Nei, avbryt\". Vi vil "
+    "da sende deg tilbake til ${requester_name}s nettside, uten å dele noen informasjon. Du kan "
+    "deretter velge en alternativ metode for å bekrefte din tilknyting."
+
+msgid "more_information"
+msgstr ""
+    "For mere detaljer om informasjonen vi deler med ${requester_name} vennligst velg "
+    "\"Details\" nedenfor.<br><br>"
+    "Mer informasjon: <a href=\"${privacy_url}\">personvernerklæring</a>"
+
+msgid "Details"
+msgstr "Detaljer"
+
+msgid "persistent_identifier"
+msgstr "I tillegg kan vi eventuelt oppgi en pseudonymisert vedvarande ID"
+
+msgid "OK, accept"
+msgstr "Ok, Gi samtykke"
+
+msgid "No, cancel"
+msgstr "Nej, avbryt"
