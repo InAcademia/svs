@@ -49,6 +49,10 @@ class InAcademiaBackend(SAMLBackend):
         return result
 
     def authn_response(self, context, binding):
+        transaction_log(context.state, self.config.get("response_entry_order", 500),
+                        "inacademia_backend", "response", "entry", "success", '', '',
+                        'Recieved response from IdP')
+
         if not self.name in context.state:
             transaction_log(context.state, self.config.get("response_entry_order", 510),
                         "inacademia_backend", "response", "entry", "failed", '', '', 'Recieved response from IdP, but state lost', 'internal')
@@ -88,10 +92,6 @@ class InAcademiaBackend(SAMLBackend):
                         "inacademia_backend", "response", "exit", "fail",resp_idp_entityid,'Failed to construct persistent user id from IdP response', 'idp')
 
             raise SATOSAAuthenticationError(state, 'Failed to construct persistent user id from IdP response.')
-
-        # Happy Flow
-        transaction_log(state, self.config.get("response_entry_order", 500),
-                        "inacademia_backend", "response", "entry", "success", '', resp_idp_entityid, 'Recieved response from IdP')
 
         return internal_resp
 

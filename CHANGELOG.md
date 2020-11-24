@@ -2,6 +2,12 @@
 All notable changes to InAcademia SVS will be documented in this file.
 
 ## [Unreleased]
+## 2020-11-18
+### Changed
+- Fixed the position of transaction logging code 500
+### Added
+- New transaction logging code 600 (Logged when there is an authentication error from IdP)
+
 ## 2020-11-13
 ### Added
 - Error handling against authentication error from IdP 
