@@ -89,9 +89,12 @@ class InAcademiaBackend(SAMLBackend):
         if not internal_resp.user_id:
 
             transaction_log(state, self.config.get("response_exit_order", 620),
-                        "inacademia_backend", "response", "exit", "fail",resp_idp_entityid,'Failed to construct persistent user id from IdP response', 'idp')
+                            "inacademia_backend", "response", "exit", "fail", '', resp_idp_entityid,
+                            ErrorDescription.FAILED_TO_CONSTRUCT_PERSISTENT_USERID[LOG_MSG], 'idp')
 
-            raise SATOSAAuthenticationError(state, 'Failed to construct persistent user id from IdP response.')
+            auth_error = SATOSAAuthenticationError(state, "")
+            auth_error._message = ErrorDescription.FAILED_TO_CONSTRUCT_PERSISTENT_USERID[ERROR_DESC]
+            raise auth_error
 
         return internal_resp
 
