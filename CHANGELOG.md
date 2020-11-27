@@ -2,6 +2,8 @@
 All notable changes to InAcademia SVS will be documented in this file.
 
 ## [Unreleased]
+## 2020-11-27
+- Add logline for received IdP attributes to backend
 ## 2020-11-24
 - Updated translations
 ## 2020-11-03
