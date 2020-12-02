@@ -24,3 +24,10 @@ class ErrorDescription(dict, Enum):
 
     USER_CONSENT_DENIED = {ERROR_DESC: "User Consent Denied",
                            LOG_MSG: "Consent was denied by the user."}
+
+    AUTHENTICATION_ERROR_FROM_IDP = {ERROR_DESC: "authentication failed",
+                                     LOG_MSG: "Returning to the RP because of invalid SAML Response."}
+
+    FAILED_TO_CONSTRUCT_PERSISTENT_USERID = {
+        ERROR_DESC: "error creating persistent identifier due to insufficient information from IdP",
+        LOG_MSG: "Failed to construct persistent user id from IdP response."}
