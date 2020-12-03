@@ -69,7 +69,7 @@ class InAcademiaBackend(SAMLBackend):
         # auth_response object will also be modified
         # import pdb; pdb.set_trace()
         internal_resp = super()._translate_response(auth_response, state)
-        satosa_logging(logger, logging.DEBUG, "Attributes received from IdP {} {}".format(auth_response.response.issuer.text, json.dumps([k for k in auth_response.ava.keys()])), state)
+        satosa_logging(logger, logging.INFO, "Attributes received from IdP {} {}".format(auth_response.response.issuer.text, json.dumps([k for k in auth_response.ava.keys()])), state)
         resp_idp_entityid = internal_resp.to_dict().get('auth_info').get('issuer')
 
         if not any(affiliation_attr in auth_response.ava for affiliation_attr in self.config['affiliation_attributes']):
