@@ -5,6 +5,9 @@ All notable changes to InAcademia SVS will be documented in this file.
 
 ## [Released]
 ## 2.6.0
+## 2020-12-03
+- Change IdP attributes logline to INFO
+
 ## 2020-11-27
 - Add logline for received IdP attributes to backend
 
