@@ -28,17 +28,20 @@ class AssertHint(ResponseMicroService):
     def __init__(self, config, internal_attributes, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.internal_attribute = config.get('internal_attribute', 'idp_used')
-        logger.info("AssertHint micro_service is active %s" % self.internal_attribute)
+        logger.info(f"AssertHint micro_service is active {self.internal_attribute}")
 
     def process(self, context, internal_response):
         idp_hint_key = context.state['InAcademia'].get('idp_hint_key', None)
-        logger.debug("AssertHint requested idp_hint: %s" % idp_hint_key)
+        real_idp_hint_key = context.state['InAcademia'].get('real_idp_hint_key', None)
+        logger.debug(f"AssertHint requested idp_hint: {idp_hint_key}, real_idp_hint: {real_idp_hint_key}")
 
-        if idp_hint_key is not None:
+        if real_idp_hint_key is not None:
             issuer = internal_response.auth_info.issuer
-            logger.info("AssertHint issuer: %s" % issuer)
+            logger.info(f"AssertHint issuer: {issuer}")
 
             issuer_hash = inacademia_hinting_hash(issuer)
-            internal_response.attributes[self.internal_attribute] = [issuer_hash]
+            #logger.info(f"AssertHint issuer hash: {issuer_hash}")
+            if issuer_hash == real_idp_hint_key:
+                internal_response.attributes[self.internal_attribute] = [idp_hint_key]
 
         return super().process(context, internal_response)
