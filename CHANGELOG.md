@@ -2,6 +2,8 @@
 All notable changes to InAcademia SVS will be documented in this file.
 
 ## [Unreleased]
+## 2020-12-08
+- Add idp_hint translation logic
 
 ## [Released]
 ## 2.6.0
@@ -13,7 +15,7 @@ All notable changes to InAcademia SVS will be documented in this file.
 
 ## 2020-11-25
 ### Added
-- Error handling when a user requests 'persistent' scope but SVS is unable to construct/retrieve persistent user id for that user due to insufficient information from IdP. 
+- Error handling when a user requests 'persistent' scope but SVS is unable to construct/retrieve persistent user id for that user due to insufficient information from IdP.
 
 ## 2020-11-18
 ### Changed
@@ -23,7 +25,7 @@ All notable changes to InAcademia SVS will be documented in this file.
 
 ## 2020-11-13
 ### Added
-- Error handling against authentication error from IdP 
+- Error handling against authentication error from IdP
 
 ## 2020-11-24
 - Updated translations
