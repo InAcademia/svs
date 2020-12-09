@@ -105,13 +105,13 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
 
     def _read_translation_id_map(self):
         with open(self.config['translation_id_map_path']) as f:
-            return yaml.load(f, Loader=yaml.FullLoader)
+            return yaml.safe_load(f)
 
-    def _translate_hint(self, hint):
-        result = self.translation_id_map.get(hint, None)
-        if result:
-            return self._translate_hint(result)
-        return hint
+    def _get_fresh_hint(self, stale_hint):
+        fresh_hint = stale_hint
+        while fresh_hint in self.translation_id_map:
+            fresh_hint = self.translation_id_map[fresh_hint]
+        return fresh_hint
 
     def _get_target_entityid_from_request(self, context):
         params = parse_qs(context.state['InAcademia']['oidc_request'])
@@ -126,7 +126,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
                 idp_hint_key = None
         if idp_hint_key:
             logger.debug(f"received hint: {idp_hint_key}")
-            real_idp_hint_key = self._translate_hint(idp_hint_key)
+            real_idp_hint_key = self._get_fresh_hint(idp_hint_key)
             logger.debug(f"translated hint: {real_idp_hint_key}")
             context.state['InAcademia']['idp_hint_key'] = idp_hint_key
             context.state['InAcademia']['real_idp_hint_key'] = real_idp_hint_key
