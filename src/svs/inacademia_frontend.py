@@ -125,13 +125,11 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
             except KeyError:
                 idp_hint_key = None
         if idp_hint_key:
-            logger.debug(f"received hint: {idp_hint_key}")
-            real_idp_hint_key = self._get_fresh_hint(idp_hint_key)
-            logger.debug(f"translated hint: {real_idp_hint_key}")
+            fresh_idp_hint_key = self._get_fresh_hint(idp_hint_key)
             context.state['InAcademia']['idp_hint_key'] = idp_hint_key
-            context.state['InAcademia']['real_idp_hint_key'] = real_idp_hint_key
-            entity_id = self.entity_id_map.get(real_idp_hint_key, None)
-            logger.debug(f"hinted entity_id: {entity_id}")
+            context.state['InAcademia']['fresh_idp_hint_key'] = fresh_idp_hint_key
+            entity_id = self.entity_id_map.get(fresh_idp_hint_key, None)
+            logger.debug({"received hint": idp_hint_key, "fresh hint": fresh_idp_hint_key, "mapped entityID": entity_id})
             if entity_id:
                 #Base64 encode the URL because SATOSA's saml2 backend expects it so
                 entity_id = urlsafe_b64encode(entity_id.encode('utf-8'))
