@@ -1,6 +1,7 @@
 import functools
 import json
 import logging
+import yaml
 from urllib.parse import parse_qs, urlparse
 from base64 import urlsafe_b64encode
 from oic.oic.message import AuthorizationErrorResponse
@@ -78,6 +79,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         config['provider'] = {'response_types_supported': ['id_token'], 'scopes_supported': ['openid'] + SCOPE_VALUES}
         super().__init__(auth_req_callback_func, internal_attributes, config, base_url, name)
         self.entity_id_map = self._read_entity_id_map()
+        self.translation_id_map = self._read_translation_id_map()
 
     def _create_provider(self, endpoint_baseurl):
         super()._create_provider(endpoint_baseurl)
@@ -101,6 +103,16 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         with open(self.config['entity_id_map_path']) as f:
             return json.loads(f.read())
 
+    def _read_translation_id_map(self):
+        with open(self.config['translation_id_map_path']) as f:
+            return yaml.safe_load(f)
+
+    def _get_fresh_hint(self, stale_hint):
+        fresh_hint = stale_hint
+        while fresh_hint in self.translation_id_map:
+            fresh_hint = self.translation_id_map[fresh_hint]
+        return fresh_hint
+
     def _get_target_entityid_from_request(self, context):
         params = parse_qs(context.state['InAcademia']['oidc_request'])
         if 'idp_hint' in params.keys():
@@ -113,10 +125,11 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
             except KeyError:
                 idp_hint_key = None
         if idp_hint_key:
-            # We could suffice with idp_hint = true, but we may want
-            # to act differently on mismatches in the future?
+            fresh_idp_hint_key = self._get_fresh_hint(idp_hint_key)
             context.state['InAcademia']['idp_hint_key'] = idp_hint_key
-            entity_id = self.entity_id_map.get(idp_hint_key, None)
+            context.state['InAcademia']['fresh_idp_hint_key'] = fresh_idp_hint_key
+            entity_id = self.entity_id_map.get(fresh_idp_hint_key, None)
+            logger.debug({"received hint": idp_hint_key, "fresh hint": fresh_idp_hint_key, "mapped entityID": entity_id})
             if entity_id:
                 #Base64 encode the URL because SATOSA's saml2 backend expects it so
                 entity_id = urlsafe_b64encode(entity_id.encode('utf-8'))
