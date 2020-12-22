@@ -4,6 +4,8 @@ import logging
 import yaml
 from urllib.parse import parse_qs, urlparse
 from base64 import urlsafe_b64encode
+
+from oic.oic import scope2claims
 from oic.oic.message import AuthorizationErrorResponse
 from oic.oic.provider import RegistrationEndpoint, AuthorizationEndpoint, TokenEndpoint, UserinfoEndpoint
 from pyop.exceptions import InvalidAuthenticationRequest
@@ -58,19 +60,10 @@ def scope_is_valid_for_client(provider, authentication_request):
                                                authentication_request, oauth_error='invalid_scope')
 
 
-def claims_request_is_valid_for_client(provider, authentication_request):
+def claims_request_is_valid(provider, authentication_request):
     requested_claims = authentication_request.get('claims', {})
     if 'userinfo' in requested_claims:
         raise InvalidAuthenticationRequest('Userinfo claims can\'t be requested.',
-                                           authentication_request, oauth_error='invalid_request')
-
-    id_token_claims = requested_claims.get('id_token', {}).keys()
-    if not id_token_claims:
-        return
-
-    allowed = provider.clients[authentication_request['client_id']]['allowed_claims']
-    if not all(c in allowed for c in id_token_claims):
-        raise InvalidAuthenticationRequest('Requested claims \'{}\' not allowed.'.format(id_token_claims),
                                            authentication_request, oauth_error='invalid_request')
 
 
@@ -86,7 +79,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         self.provider.authentication_request_validators.append(
                 functools.partial(scope_is_valid_for_client, self.provider))
         self.provider.authentication_request_validators.append(
-            functools.partial(claims_request_is_valid_for_client, self.provider))
+            functools.partial(claims_request_is_valid, self.provider))
 
         with open(self.config['client_db_path']) as f:
             self.provider.clients = json.loads(f.read())
@@ -136,6 +129,25 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         else:
             entity_id = None
         return entity_id
+
+    def _get_approved_attributes(self, provider_supported_claims, authn_req):
+        client_allowed_claims = self.provider.clients[authn_req['client_id']]['allowed_claims']
+        requested_claims = list(scope2claims(authn_req["scope"]).keys())
+
+        if "claims" in authn_req:
+            for k in ["id_token", "userinfo"]:
+                if k in authn_req["claims"]:
+                    additional_claims = authn_req["claims"][k].keys()
+                    requested_claims.extend(list(set(additional_claims).intersection(set(client_allowed_claims))))
+
+        if not all(claim in client_allowed_claims for claim in additional_claims):
+            logger.warning(
+                "The additional claims requested are: '{additional_claims}' "
+                "but the allowed claims for the client are: {client_allowed_claims}".format(
+                    additional_claims=list(additional_claims), client_allowed_claims=client_allowed_claims))
+
+        return set(provider_supported_claims).intersection(set(requested_claims))
+
 
     def handle_authn_request(self, context):
         internal_request = super()._handle_authn_request(context)
