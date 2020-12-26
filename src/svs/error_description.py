@@ -22,7 +22,7 @@ class ErrorDescription(dict, Enum):
     REQUESTED_AFFILIATION_MISMATCH = {ERROR_DESC: "affiliation does not match requested validation",
                                       LOG_MSG: "Affiliation from IdP does not match requested validation from RP."}
 
-    USER_CONSENT_DENIED = {ERROR_DESC: "User Consent Denied",
+    USER_CONSENT_DENIED = {ERROR_DESC: "user consent denied",
                            LOG_MSG: "Consent was denied by the user."}
 
     AUTHENTICATION_ERROR_FROM_IDP = {ERROR_DESC: "authentication failed",
@@ -31,3 +31,7 @@ class ErrorDescription(dict, Enum):
     FAILED_TO_CONSTRUCT_PERSISTENT_USERID = {
         ERROR_DESC: "error creating persistent identifier due to insufficient information from IdP",
         LOG_MSG: "Failed to construct persistent user id from IdP response."}
+
+    REQUEST_PARAM_INVALID_FORMAT = {
+        ERROR_DESC: "invalid format of request parameter: '{}'",
+        LOG_MSG: "invalid format of request parameter: '{}'. Error: {}"}

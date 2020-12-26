@@ -2,6 +2,10 @@
 All notable changes to InAcademia SVS will be documented in this file.
 
 ## [Unreleased]
+## 2020-12-26
+### Added
+- Error handling - RP provides claim in invalid JSON format in authorization request.
+
 ## 2020-12-08
 - Add idp_hint translation logic
 

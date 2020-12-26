@@ -138,6 +138,11 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         return entity_id
 
     def handle_authn_request(self, context):
+        authn_request_format_error = self._validate_authn_request_format(context.request)
+
+        if authn_request_format_error:
+            return authn_request_format_error
+
         internal_request = super()._handle_authn_request(context)
 
         if not isinstance(internal_request, InternalRequest):
@@ -176,6 +181,37 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
                         "inacademia_frontend", "request", "exit", "success", '' , req_rp, 'Processed request from RP')
 
         return self.auth_req_callback_func(context, internal_request)
+
+    def _validate_authn_request_format(self, request):
+        try:
+            claims = request['claims']
+            if claims:
+                param = 'claims'
+                if '{' not in claims:
+                    raise Exception('parameter is a valid json but does not contain a key value pair.')
+                json.loads(claims)
+        except Exception as exception:
+            return self._handle_authn_request_error(request, exception, param)
+        return None
+
+    @staticmethod
+    def _handle_authn_request_error(request, exception, param):
+        logger.warning(
+            ErrorDescription.REQUEST_PARAM_INVALID_FORMAT[LOG_MSG].format(param, str(exception)))
+
+        if request['state']:
+            error_resp = AuthorizationErrorResponse(error="invalid_request",
+                                                    error_description=
+                                                    ErrorDescription.REQUEST_PARAM_INVALID_FORMAT[
+                                                        ERROR_DESC].format(param),
+                                                    state=request['state'])
+        else:
+            error_resp = AuthorizationErrorResponse(error="invalid_request",
+                                                    error_description=
+                                                    ErrorDescription.REQUEST_PARAM_INVALID_FORMAT[
+                                                        ERROR_DESC].format(param))
+
+        return SeeOther(error_resp.request(request['redirect_uri'], should_fragment_encode(request)))
 
     def handle_authn_response(self, context, internal_resp):
         auth_req = self._get_authn_request_from_state(context.state)
