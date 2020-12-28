@@ -126,6 +126,8 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
                 idp_hint_key = None
         if idp_hint_key:
             fresh_idp_hint_key = self._get_fresh_hint(idp_hint_key)
+            if fresh_idp_hint_key != idp_hint_key:
+                logger.info('The provided idp_hint is stale. Found translation from the stale to fresh idp_hint.')
             context.state['InAcademia']['idp_hint_key'] = idp_hint_key
             context.state['InAcademia']['fresh_idp_hint_key'] = fresh_idp_hint_key
             entity_id = self.entity_id_map.get(fresh_idp_hint_key, None)
@@ -133,6 +135,8 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
             if entity_id:
                 #Base64 encode the URL because SATOSA's saml2 backend expects it so
                 entity_id = urlsafe_b64encode(entity_id.encode('utf-8'))
+            else:
+                logger.warning('Unable to retrieve entity_id against the requested idp_hint.')
         else:
             entity_id = None
         return entity_id
@@ -149,8 +153,8 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         # Ugly work-around because there is no state yet in authn_request handler
         context.state['SATOSA_BASE'] = {'requester': context.request['client_id']}
 
-        transaction_log(context.state, self.config.get("request_exit_order", 100),
-                        "inacademia_frontend", "request", "entry", "success", '' , req_rp, 'Recieved request from RP')
+        transaction_log(context.state, self.config.get("request_entry_order", 100),
+                        "inacademia_frontend", "request", "entry", "success", '', req_rp, 'Recieved request from RP')
 
         # initialise consent state
         context.state[consent.STATE_KEY] = {}
@@ -173,7 +177,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         logger.debug('SESSION_ID: {}'.format(session_id))
 
         transaction_log(context.state, self.config.get("request_exit_order", 200),
-                        "inacademia_frontend", "request", "exit", "success", '' , req_rp, 'Processed request from RP')
+                        "inacademia_frontend", "request", "exit", "success", '', req_rp, 'Processed request from RP')
 
         return self.auth_req_callback_func(context, internal_request)
 

@@ -42,12 +42,40 @@ class InAcademiaBackend(SAMLBackend):
         return None
 
     def authn_request(self, context, entity_id):
-        result = super().authn_request(context, entity_id)
+        transaction_log(context.state, self.config.get("request_entry_order", 300),
+                        "inacademia_backend", "request", "entry", "success", entity_id, '', 'Create SAML request')
+
+        if not self._is_idp_entity_id_metadata_exists(entity_id):
+            transaction_log(context.state, self.config.get("request_exit_order", 340),
+                            "inacademia_backend", "request", "exit", "fail", '', '',
+                            ErrorDescription.IDP_ENTITY_ID_METADATA_NOT_FOUND[LOG_MSG], 'mdx')
+
+            auth_error = SATOSAAuthenticationError(context.state, "")
+            auth_error._message = ErrorDescription.IDP_ENTITY_ID_METADATA_NOT_FOUND[ERROR_DESC]
+            raise auth_error
+
+        try:
+            result = super().authn_request(context, entity_id)
+        except SATOSAAuthenticationError:
+            transaction_log(context.state, self.config.get("request_exit_order", 380),
+                            "inacademia_backend", "request", "exit", "fail", '', '',
+                            ErrorDescription.ERROR_IN_RESOLVING_SAML_BINDING[LOG_MSG], 'mdx')
+
+            auth_error = SATOSAAuthenticationError(context.state, "")
+            auth_error._message = ErrorDescription.ERROR_IN_RESOLVING_SAML_BINDING[ERROR_DESC]
+            raise auth_error
 
         transaction_log(context.state, self.config.get("request_exit_order", 400),
                         "inacademia_backend", "request", "exit", "success", entity_id, '', 'Send request to IdP')
 
         return result
+
+    def _is_idp_entity_id_metadata_exists(self, idp_entity_id):
+        try:
+            self.sp.metadata[idp_entity_id]
+        except KeyError as e:
+            return False
+        return True
 
     def authn_response(self, context, binding):
         transaction_log(context.state, self.config.get("response_entry_order", 500),
@@ -60,7 +88,7 @@ class InAcademiaBackend(SAMLBackend):
 
             raise SATOSAProcessingHaltError({}, message="State lost", redirect_uri=self.error_uri)
 
-        context.internal_data[self.KEY_BACKEND_METADATA_STORE]=self.sp.metadata
+        context.internal_data[self.KEY_BACKEND_METADATA_STORE] = self.sp.metadata
 
         return super().authn_response(context, binding)
 
