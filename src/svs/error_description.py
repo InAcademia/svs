@@ -36,6 +36,6 @@ class ErrorDescription(dict, Enum):
         ERROR_DESC: "entity_id error",
         LOG_MSG: "IdP entity_id is not known to the MDX server."}
 
-    ERROR_IN_RESOLVING_SAML_BINDING = {
+    FAILED_TO_CONSTRUCT_SAML_AUTHN_REQ = {
         ERROR_DESC: "entity_id error",
-        LOG_MSG: "Encountered error while resolving SAML binding via MDX server."}
+        LOG_MSG: "Failed to construct SAML authentication request."}

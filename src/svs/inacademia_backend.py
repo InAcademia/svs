@@ -59,10 +59,10 @@ class InAcademiaBackend(SAMLBackend):
         except SATOSAAuthenticationError:
             transaction_log(context.state, self.config.get("request_exit_order", 380),
                             "inacademia_backend", "request", "exit", "fail", '', '',
-                            ErrorDescription.ERROR_IN_RESOLVING_SAML_BINDING[LOG_MSG], 'mdx')
+                            ErrorDescription.FAILED_TO_CONSTRUCT_SAML_AUTHN_REQ[LOG_MSG], 'mdx')
 
             auth_error = SATOSAAuthenticationError(context.state, "")
-            auth_error._message = ErrorDescription.ERROR_IN_RESOLVING_SAML_BINDING[ERROR_DESC]
+            auth_error._message = ErrorDescription.FAILED_TO_CONSTRUCT_SAML_AUTHN_REQ[ERROR_DESC]
             raise auth_error
 
         transaction_log(context.state, self.config.get("request_exit_order", 400),
