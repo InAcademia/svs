@@ -16,6 +16,7 @@ from svs.affiliation import AFFILIATIONS, get_matching_affiliation
 from dateutil import parser
 from .util.transaction_flow_logging import transaction_log
 from .error_description import ErrorDescription, ERROR_DESC, LOG_MSG
+from typing import Mapping
 
 logger = logging.getLogger('satosa')
 
@@ -138,10 +139,10 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         return entity_id
 
     def handle_authn_request(self, context):
-        authn_request_format_error = self._validate_authn_request_format(context.request)
+        authn_request_error = self._validate_authn_request(context.request)
 
-        if authn_request_format_error:
-            return authn_request_format_error
+        if authn_request_error:
+            return authn_request_error
 
         internal_request = super()._handle_authn_request(context)
 
@@ -182,35 +183,26 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
 
         return self.auth_req_callback_func(context, internal_request)
 
-    def _validate_authn_request_format(self, request):
-        try:
-            claims = request['claims']
-            if claims:
-                param = 'claims'
-                if '{' not in claims:
-                    raise Exception('parameter is a valid json but does not contain a key value pair.')
-                json.loads(claims)
-        except Exception as exception:
-            return self._handle_authn_request_error(request, exception, param)
+    def _validate_authn_request(self, request):
+        claims = request.get('claims')
+        if claims:
+            try:
+                claims_obj = json.loads(claims)
+            except json.decoder.JSONDecodeError as e:
+                return self._handle_authn_request_error(request, str(e), 'claims')
+            if not isinstance(claims_obj, Mapping):
+                return self._handle_authn_request_error(request, "Valid JSON but is not key value pair.", 'claims')
         return None
 
     @staticmethod
-    def _handle_authn_request_error(request, exception, param):
+    def _handle_authn_request_error(request, cause, param):
         logger.warning(
-            ErrorDescription.REQUEST_PARAM_INVALID_FORMAT[LOG_MSG].format(param, str(exception)))
-
-        if request['state']:
-            error_resp = AuthorizationErrorResponse(error="invalid_request",
-                                                    error_description=
-                                                    ErrorDescription.REQUEST_PARAM_INVALID_FORMAT[
-                                                        ERROR_DESC].format(param),
-                                                    state=request['state'])
-        else:
-            error_resp = AuthorizationErrorResponse(error="invalid_request",
-                                                    error_description=
-                                                    ErrorDescription.REQUEST_PARAM_INVALID_FORMAT[
-                                                        ERROR_DESC].format(param))
-
+            ErrorDescription.REQUEST_PARAM_INVALID_FORMAT[LOG_MSG].format(param, cause))
+        state_param = {"state": request['state']} if request.get('state') else {}
+        error_description = ErrorDescription.REQUEST_PARAM_INVALID_FORMAT[ERROR_DESC].format(param)
+        error_resp = AuthorizationErrorResponse(
+            error="invalid_request", error_description=error_description, **state_param,
+        )
         return SeeOther(error_resp.request(request['redirect_uri'], should_fragment_encode(request)))
 
     def handle_authn_response(self, context, internal_resp):
