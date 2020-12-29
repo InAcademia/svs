@@ -5,7 +5,6 @@ import yaml
 from urllib.parse import parse_qs, urlparse
 from base64 import urlsafe_b64encode
 
-from oic.oic import scope2claims
 from oic.oic.message import AuthorizationErrorResponse
 from oic.oic.provider import RegistrationEndpoint, AuthorizationEndpoint, TokenEndpoint, UserinfoEndpoint
 from pyop.exceptions import InvalidAuthenticationRequest
@@ -131,23 +130,10 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         return entity_id
 
     def _get_approved_attributes(self, provider_supported_claims, authn_req):
-        client_allowed_claims = self.provider.clients[authn_req['client_id']]['allowed_claims']
-        requested_claims = list(scope2claims(authn_req["scope"]).keys())
-
-        if "claims" in authn_req:
-            for k in ["id_token", "userinfo"]:
-                if k in authn_req["claims"]:
-                    additional_claims = authn_req["claims"][k].keys()
-                    requested_claims.extend(list(set(additional_claims).intersection(set(client_allowed_claims))))
-
-        if not all(claim in client_allowed_claims for claim in additional_claims):
-            logger.warning(
-                "The additional claims requested are: '{additional_claims}' "
-                "but the allowed claims for the client are: {client_allowed_claims}".format(
-                    additional_claims=list(additional_claims), client_allowed_claims=client_allowed_claims))
-
-        return set(provider_supported_claims).intersection(set(requested_claims))
-
+        claims_filtered_by_provider_supported = super()._get_approved_attributes(provider_supported_claims, authn_req)
+        claims_allowed_for_client = self.provider.clients[authn_req['client_id']].get('allowed_claims', {})
+        approved_claims = claims_filtered_by_provider_supported.intersection(claims_allowed_for_client)
+        return approved_claims
 
     def handle_authn_request(self, context):
         internal_request = super()._handle_authn_request(context)
