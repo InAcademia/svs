@@ -139,10 +139,10 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         return entity_id
 
     def handle_authn_request(self, context):
-        authn_request_error = self._validate_authn_request(context.request)
-
-        if authn_request_error:
-            return authn_request_error
+        try:
+            self._validate_claims_format(context.request.get('claims'))
+        except ValueError as e:
+            return self._handle_authn_request_error(context.request, str(e), 'claims')
 
         internal_request = super()._handle_authn_request(context)
 
@@ -183,16 +183,24 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
 
         return self.auth_req_callback_func(context, internal_request)
 
-    def _validate_authn_request(self, request):
-        claims = request.get('claims')
-        if claims:
-            try:
-                claims_obj = json.loads(claims)
-            except json.decoder.JSONDecodeError as e:
-                return self._handle_authn_request_error(request, str(e), 'claims')
-            if not isinstance(claims_obj, Mapping):
-                return self._handle_authn_request_error(request, "Valid JSON but is not key value pair.", 'claims')
-        return None
+    @staticmethod
+    def _validate_claims_format(claims):
+        """
+        Verify if the claims is in valid JSON format and if it constitutes key value pair.
+        This method either returns nothing which means the claims is invalid format or raise ValueError in case
+        the claims is in invalid format.
+
+        :type claims: str
+        :param claims: value of claims in oidc authorization request
+        """
+        if not claims:
+            return
+        try:
+            claims_obj = json.loads(claims)
+        except json.decoder.JSONDecodeError as e:
+            raise ValueError(str(e))
+        if not isinstance(claims_obj, Mapping):
+            raise ValueError("Valid JSON but is not key value pair.")
 
     @staticmethod
     def _handle_authn_request_error(request, cause, param):
