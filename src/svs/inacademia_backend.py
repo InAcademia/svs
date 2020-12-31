@@ -56,14 +56,14 @@ class InAcademiaBackend(SAMLBackend):
 
         try:
             result = super().authn_request(context, entity_id)
-        except SATOSAAuthenticationError:
+        except SATOSAAuthenticationError as e:
             transaction_log(context.state, self.config.get("request_exit_order", 380),
                             "inacademia_backend", "request", "exit", "fail", '', '',
                             ErrorDescription.FAILED_TO_CONSTRUCT_SAML_AUTHN_REQ[LOG_MSG], 'mdx')
 
             auth_error = SATOSAAuthenticationError(context.state, "")
             auth_error._message = ErrorDescription.FAILED_TO_CONSTRUCT_SAML_AUTHN_REQ[ERROR_DESC]
-            raise auth_error
+            raise auth_error from e
 
         transaction_log(context.state, self.config.get("request_exit_order", 400),
                         "inacademia_backend", "request", "exit", "success", entity_id, '', 'Send request to IdP')
