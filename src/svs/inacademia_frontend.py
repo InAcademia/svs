@@ -4,6 +4,7 @@ import logging
 import yaml
 from urllib.parse import parse_qs, urlparse
 from base64 import urlsafe_b64encode
+
 from oic.oic.message import AuthorizationErrorResponse
 from oic.oic.provider import RegistrationEndpoint, AuthorizationEndpoint, TokenEndpoint, UserinfoEndpoint
 from pyop.exceptions import InvalidAuthenticationRequest
@@ -59,19 +60,10 @@ def scope_is_valid_for_client(provider, authentication_request):
                                                authentication_request, oauth_error='invalid_scope')
 
 
-def claims_request_is_valid_for_client(provider, authentication_request):
+def claims_request_is_valid(provider, authentication_request):
     requested_claims = authentication_request.get('claims', {})
     if 'userinfo' in requested_claims:
         raise InvalidAuthenticationRequest('Userinfo claims can\'t be requested.',
-                                           authentication_request, oauth_error='invalid_request')
-
-    id_token_claims = requested_claims.get('id_token', {}).keys()
-    if not id_token_claims:
-        return
-
-    allowed = provider.clients[authentication_request['client_id']]['allowed_claims']
-    if not all(c in allowed for c in id_token_claims):
-        raise InvalidAuthenticationRequest('Requested claims \'{}\' not allowed.'.format(id_token_claims),
                                            authentication_request, oauth_error='invalid_request')
 
 
@@ -87,7 +79,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         self.provider.authentication_request_validators.append(
                 functools.partial(scope_is_valid_for_client, self.provider))
         self.provider.authentication_request_validators.append(
-            functools.partial(claims_request_is_valid_for_client, self.provider))
+            functools.partial(claims_request_is_valid, self.provider))
 
         with open(self.config['client_db_path']) as f:
             self.provider.clients = json.loads(f.read())
@@ -127,6 +119,8 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
                 idp_hint_key = None
         if idp_hint_key:
             fresh_idp_hint_key = self._get_fresh_hint(idp_hint_key)
+            if fresh_idp_hint_key != idp_hint_key:
+                logger.info('The provided idp_hint is stale. Found translation from the stale to fresh idp_hint.')
             context.state['InAcademia']['idp_hint_key'] = idp_hint_key
             context.state['InAcademia']['fresh_idp_hint_key'] = fresh_idp_hint_key
             entity_id = self.entity_id_map.get(fresh_idp_hint_key, None)
@@ -134,9 +128,17 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
             if entity_id:
                 #Base64 encode the URL because SATOSA's saml2 backend expects it so
                 entity_id = urlsafe_b64encode(entity_id.encode('utf-8'))
+            else:
+                logger.warning('Unable to retrieve entity_id against the requested idp_hint.')
         else:
             entity_id = None
         return entity_id
+
+    def _get_approved_attributes(self, provider_supported_claims, authn_req):
+        claims_filtered_by_provider_supported = super()._get_approved_attributes(provider_supported_claims, authn_req)
+        claims_allowed_for_client = self.provider.clients[authn_req['client_id']].get('allowed_claims', {})
+        approved_claims = claims_filtered_by_provider_supported.intersection(claims_allowed_for_client)
+        return approved_claims
 
     def handle_authn_request(self, context):
         try:
@@ -155,8 +157,8 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         # Ugly work-around because there is no state yet in authn_request handler
         context.state['SATOSA_BASE'] = {'requester': context.request['client_id']}
 
-        transaction_log(context.state, self.config.get("request_exit_order", 100),
-                        "inacademia_frontend", "request", "entry", "success", '' , req_rp, 'Recieved request from RP')
+        transaction_log(context.state, self.config.get("request_entry_order", 100),
+                        "inacademia_frontend", "request", "entry", "success", '', req_rp, 'Recieved request from RP')
 
         # initialise consent state
         context.state[consent.STATE_KEY] = {}
@@ -179,7 +181,7 @@ class InAcademiaFrontend(OpenIDConnectFrontend):
         logger.debug('SESSION_ID: {}'.format(session_id))
 
         transaction_log(context.state, self.config.get("request_exit_order", 200),
-                        "inacademia_frontend", "request", "exit", "success", '' , req_rp, 'Processed request from RP')
+                        "inacademia_frontend", "request", "exit", "success", '', req_rp, 'Processed request from RP')
 
         return self.auth_req_callback_func(context, internal_request)
 

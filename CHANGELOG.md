@@ -2,9 +2,19 @@
 All notable changes to InAcademia SVS will be documented in this file.
 
 ## [Unreleased]
+
+## 2020-12-28
+### Added
+- Error handling for the case when SVS is unable to retrieve metadata against the resolved idp entity_id
+- Error handling for the case when SVS is unable to resolve SAML binding of the resolved idp entity_id
+
 ## 2020-12-26
 ### Added
 - Error handling - RP provides 'claims' request parameter in invalid JSON format in the authorization request.
+
+## 2020-12-22
+### Changed
+- The additional claims which are not supported by a client should not cause transaction failure. Rather, the unsupported claims should be ignored gracefully.
 
 ## 2020-12-08
 - Add idp_hint translation logic

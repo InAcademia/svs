@@ -35,3 +35,11 @@ class ErrorDescription(dict, Enum):
     REQUEST_PARAM_INVALID_FORMAT = {
         ERROR_DESC: "invalid format of request parameter: '{}'",
         LOG_MSG: "invalid format of request parameter: '{}'. Error: {}"}
+
+    IDP_ENTITY_ID_METADATA_NOT_FOUND = {
+        ERROR_DESC: "entity_id error",
+        LOG_MSG: "IdP entity_id is not known to the MDX server."}
+
+    FAILED_TO_CONSTRUCT_SAML_AUTHN_REQ = {
+        ERROR_DESC: "entity_id error",
+        LOG_MSG: "Failed to construct SAML authentication request."}
