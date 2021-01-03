@@ -10,6 +10,10 @@ All notable changes to InAcademia SVS will be documented in this file.
 ## 2020-12-08
 - Add idp_hint translation logic
 
+## 2020-12-22
+### Changed
+- The additional claims which are not supported by a client should not cause transaction failure. Rather, the unsupported claims should be ignored gracefully.
+
 ## [Released]
 ## 2.6.0
 ## 2020-12-03
