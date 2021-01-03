@@ -31,3 +31,11 @@ class ErrorDescription(dict, Enum):
     FAILED_TO_CONSTRUCT_PERSISTENT_USERID = {
         ERROR_DESC: "error creating persistent identifier due to insufficient information from IdP",
         LOG_MSG: "Failed to construct persistent user id from IdP response."}
+
+    IDP_ENTITY_ID_METADATA_NOT_FOUND = {
+        ERROR_DESC: "entity_id error",
+        LOG_MSG: "IdP entity_id is not known to the MDX server."}
+
+    FAILED_TO_CONSTRUCT_SAML_AUTHN_REQ = {
+        ERROR_DESC: "entity_id error",
+        LOG_MSG: "Failed to construct SAML authentication request."}
